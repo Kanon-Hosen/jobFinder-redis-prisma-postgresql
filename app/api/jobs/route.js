@@ -9,7 +9,7 @@ export async function POST(req) {
     const {
       title,
       description,
-      jobType,
+      type,
       location,
       userId,
       benefits,
@@ -18,13 +18,13 @@ export async function POST(req) {
       company,
     } = await req.json();
 
-    console.log(benefits,salary,requirements)
+    console.log(benefits, type, salary, userId);
 
     const postJob = await prisma.jobs.create({
       data: {
         title,
         description,
-        type: jobType,
+        type,
         company,
         requirements,
         salary,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Briefcase,
@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const jobTypes = ["Full-time", "Part-time", "Contract", "Internship"];
+const jobTypes = ["Full-time", "Remote", "Part-time", "Contract", "Internship"];
 
 const benefits = [
   "Health Insurance",
@@ -42,9 +42,34 @@ const benefits = [
 
 export default function PostJob() {
   const router = useRouter();
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/me", { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user:", error);
+      });
+  }, []);
+
+  // user id set in formData///////////////////////////////
+  useEffect(() => {
+    if (user?.id) {
+      setFormData((prev) => ({
+        ...prev,
+        userId: user.id,
+      }));
+    }
+  }, [user]);
+
+  // user FormData////////////////////////////////////////
   const [formData, setFormData] = useState({
+    userId: "",
     title: "",
     description: "",
     location: "",
@@ -54,7 +79,6 @@ export default function PostJob() {
     requirements: "",
     benefits: [],
   });
-
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -73,36 +97,33 @@ export default function PostJob() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setLoading(true);
-    console.log(formData)
-    // try {
-    //   const response = await fetch("/api/jobs/", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       ...formData,
-    //       applies: [],
-    //     }),
-    //   });
+    setLoading(true);
+    try {
+      const response = await fetch("/api/jobs/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          createAt: new Date().toISOString(),
+          applies: [],
+        }),
+      });
 
-    //   if (response.ok) {
-    //     setSuccess(true);
-    //     setTimeout(() => {
-    //       router.push("/browse-jobs");
-    //     }, 2000);
-    //   } else {
-    //     throw new Error("Failed to post job");
-    //   }
-    // } catch (error) {
-    //   console.error("Error posting job:", error);
-    //   alert("Failed to post job. Please try again.");
-    // } finally {
-    //   setLoading(false);
-    // }
+      if (response.ok) {
+        setSuccess(true);
+        return router.push("/browse-jobs");
+      } else {
+        throw new Error("Failed to post job");
+      }
+    } catch (error) {
+      console.error("Error posting job:", error);
+    } finally {
+      setLoading(false);
+    }
   };
-
+  console.log(formData);
   if (success) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
@@ -217,7 +238,7 @@ export default function PostJob() {
                       Job Type *
                     </label>
                     <Select
-                      value={formData.type}
+                      value={formData?.type}
                       onValueChange={(value) =>
                         handleInputChange("type", value)
                       }

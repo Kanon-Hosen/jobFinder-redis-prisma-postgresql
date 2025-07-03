@@ -23,6 +23,7 @@ const jobTypeColors = {
   "Part-time": "bg-blue-100 text-blue-800 border-blue-200",
   Contract: "bg-purple-100 text-purple-800 border-purple-200",
   Internship: "bg-orange-100 text-orange-800 border-orange-200",
+  Remote: "bg-pink-100 text-pink-800 border-pink-200",
 };
 
 export default function BrowseJobs() {
@@ -49,7 +50,7 @@ export default function BrowseJobs() {
     }
     fetchJobs();
   }, []);
-
+console.log(jobs)
   const filteredJobs = useMemo(() => {
     let filtered =
       filter === "All" ? jobs : jobs.filter((job) => job.type === filter);
@@ -63,7 +64,9 @@ export default function BrowseJobs() {
       );
     }
 
-    return filtered.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+    return filtered.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
   }, [jobs, filter, searchTerm]);
 
   return (
@@ -111,22 +114,27 @@ export default function BrowseJobs() {
               </span>
             </div>
             <div className="flex flex-wrap gap-3">
-              {["All", "Full-time", "Part-time", "Contract", "Internship"].map(
-                (type) => (
-                  <Button
-                    key={type}
-                    onClick={() => setFilter(type)}
-                    variant={filter === type ? "default" : "outline"}
-                    className={`rounded-full transition-all duration-200 ${
-                      filter === type
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg"
-                        : "hover:bg-gray-50 border-gray-200"
-                    }`}
-                  >
-                    {type}
-                  </Button>
-                )
-              )}
+              {[
+                "All",
+                "Full-time",
+                "Remote",
+                "Part-time",
+                "Contract",
+                "Internship",
+              ].map((type) => (
+                <Button
+                  key={type}
+                  onClick={() => setFilter(type)}
+                  variant={filter === type ? "default" : "outline"}
+                  className={`rounded-full transition-all duration-200 ${
+                    filter === type
+                      ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg"
+                      : "hover:bg-gray-50 border-gray-200"
+                  }`}
+                >
+                  {type}
+                </Button>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -195,7 +203,7 @@ export default function BrowseJobs() {
                       <div className="text-right">
                         <div className="flex items-center text-sm text-gray-500 mb-1">
                           <Clock className="h-4 w-4 mr-1" />
-                          {timeAgo(job.createAt)}
+                          {timeAgo(job.createdAt)}
                         </div>
                       </div>
                     </div>

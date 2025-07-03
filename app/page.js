@@ -363,8 +363,8 @@ export default function HomePage() {
                         </span>
                         <div className="flex items-center text-sm text-gray-500">
                           <Clock className="w-4 h-4 mr-1" />
-                          {job.createAt
-                            ? timeAgo(job.createAt)
+                          {job.createdAt
+                            ? timeAgo(job.createdAt)
                             : "Recently posted"}
                         </div>
                       </div>
