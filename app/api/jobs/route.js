@@ -1,17 +1,19 @@
 import redis from "@/lib/redis";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-
 const prisma = new PrismaClient();
 
 export async function POST(req) {
+  const userId = await JwtVerify();
+  if (!userId.ok) {
+    return NextResponse.json({ message: "User Unauthorized" }, { status: 400 });
+  }
   try {
     const {
       title,
       description,
       type,
       location,
-      userId,
       benefits,
       salary,
       requirements,
@@ -55,8 +57,16 @@ export async function GET(req) {
     if (cached) {
       return NextResponse.json(JSON.parse(cached), { status: 200 });
     }
-    const jobs = await prisma.jobs.findMany();
-    await redis.set("all-jobs", JSON.stringify(jobs), "EX", 60 * 10);
+    const jobs = await prisma.jobs.findMany({
+      include: {
+        applies: {
+          include: {
+            job: true,
+          },
+        },
+      },
+    });
+    await redis.set("all-jobs", JSON.stringify(jobs), "EX", 60 * 1);
 
     return NextResponse.json(jobs, { status: 200 });
   } catch (error) {
