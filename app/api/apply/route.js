@@ -8,8 +8,8 @@ export async function POST(req) {
   const { jobId } = await req.json();
 
   const userId = await JwtVerify();
-
-  if (!jobId || !userId.ok) {
+  console.log(userId);
+  if (!jobId || !userId) {
     return NextResponse.json(
       { message: "userID and JobID invalid" },
       { status: 401 }
@@ -38,6 +38,26 @@ export async function POST(req) {
 }
 
 export async function GET(req) {
+  const userId = await JwtVerify();
+  console.log(userId);
+  if (!userId) {
+    return NextResponse.json({ message: "userID invalid" }, { status: 401 });
+  }
+
   try {
-  } catch (error) {}
+    const cached = await redis.get(`apply:${userId}`);
+    if (cached) {
+      return NextResponse.json(cached, { status: 201 });
+    }
+
+    const applies = await prisma.applications.findMany({
+      where: { userId },
+      include: { job: true },
+    });
+
+    await redis.set(`apply:${userId}`, JSON.stringify(applies), "EX", 60 * 10);
+    return NextResponse.json(applies, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
 }

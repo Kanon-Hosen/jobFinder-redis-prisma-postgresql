@@ -86,6 +86,8 @@ export default function JobDetails() {
       console.log(error.message)
     }
   };
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 py-8 px-4">
       <div className="max-w-5xl mx-auto">
