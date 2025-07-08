@@ -7,11 +7,11 @@ const prisma = new PrismaClient();
 
 export async function POST(req) {
   const body = await req.json();
-  const { email, password } = body;
+  const { name, email, password, role, companyName } = body;
 
-  if (!email || !password) {
+  if (!email || !password || !name || !role) {
     return NextResponse.json(
-      { message: "Email and password required" },
+      { message: "Name, email, password, and role are required." },
       { status: 400 }
     );
   }
@@ -20,43 +20,46 @@ export async function POST(req) {
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return NextResponse.json(
-        { message: "User already exists" },
+        { message: "User already exists." },
         { status: 409 }
       );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
-    });
+    const userData = {
+      name,
+      email,
+      password: hashedPassword,
+      role,
+    };
 
-    // ✅ Create JWT token
+    if (role === "EMPLOYER") {
+      userData.companyName = companyName || null;
+    }
+
+    const newUser = await prisma.user.create({ data: userData });
+
     const token = jwt.sign(
-      { id: newUser.id, email: newUser.email },
+      { id: newUser.id, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
+      { expiresIn: "7d" }
     );
 
     const response = NextResponse.json({ token }, { status: 200 });
-    // ✅ Set cookie
+
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
     return response;
   } catch (error) {
     console.error("Register error:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { message: "Internal server error." },
       { status: 500 }
     );
   }

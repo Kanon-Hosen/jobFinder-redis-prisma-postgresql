@@ -1,7 +1,6 @@
 import redis from "@/lib/redis";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-import JwtVerify from "@/hooks/JwtVerify";
 const prisma = new PrismaClient();
 
 export async function GET(req, { params }) {

@@ -13,6 +13,7 @@ import {
   ExternalLink,
   Loader2,
 } from "lucide-react";
+import ApplyJob from "@/components/ApplyJob";
 
 export default function JobDetails() {
   const searchParams = useSearchParams();
@@ -20,6 +21,7 @@ export default function JobDetails() {
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [openModal, setopenModal] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -70,22 +72,29 @@ export default function JobDetails() {
       </div>
     );
 
-  const handleApply = async () => {
-    try {
-      const res = await fetch("/api/apply", {
-        method: "POST",
-        headers: {
-          "conten-type": "application/json",
-        },
-        body: JSON.stringify({
-          jobId: job.id,
-        }),
-      });
-      console.log(res)
-    } catch (error) {
-      console.log(error.message)
-    }
-  };
+  // const handleApply = async () => {
+  //   try {
+  //     const res = await fetch("/api/apply", {
+  //       method: "POST",
+  //       headers: {
+  //         "conten-type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         jobId: job.id,
+  //       }),
+  //     });
+  //     console.log(res)
+  //   } catch (error) {
+  //     console.log(error.message)
+  //   }
+  // };
+
+  // open modal ::::::::::::::::::::::::::::::::::::::::::::
+  
+
+  if (openModal) {
+    return <ApplyJob setopenModal={setopenModal} />
+  }
 
 
   return (
@@ -253,7 +262,7 @@ export default function JobDetails() {
               </div>
 
               <button
-                onClick={() => handleApply()}
+                onClick={() =>setopenModal(true)}
                 className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-4 rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 flex items-center justify-center gap-3 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 <Briefcase size={20} />

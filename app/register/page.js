@@ -13,11 +13,19 @@ import {
   CheckCircle,
   AlertCircle,
   Loader2,
+  Building2,
+  Briefcase,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function RegisterPage() {
   const {
@@ -25,6 +33,7 @@ export default function RegisterPage() {
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm();
   const router = useRouter();
   const [error, setError] = useState("");
@@ -33,6 +42,7 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const password = watch("password");
+  const role = watch("role");
 
   const onSubmit = async (data) => {
     if (data.password !== data.confirmPassword) {
@@ -51,6 +61,8 @@ export default function RegisterPage() {
           email: data.email,
           password: data.password,
           name: data.name,
+          role: data.role,
+          companyName: data.role === "employer" ? data.companyName : null,
         }),
       });
 
@@ -94,7 +106,6 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Sparkles className="w-4 h-4" />
@@ -126,7 +137,35 @@ export default function RegisterPage() {
             )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              {/* Name Field */}
+              {/* Role Selection */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  You are signing up as
+                </label>
+                <Select onValueChange={(value) => setValue("role", value)}>
+                  <SelectTrigger className="w-full h-12">
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="SEEKER">
+                      <Briefcase className="w-4 h-4 inline mr-2" />
+                      Looking for a job
+                    </SelectItem>
+                    <SelectItem value="EMPLOYER">
+                      <Building2 className="w-4 h-4 inline mr-2" />
+                      Hiring for a role
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.role && (
+                  <p className="text-sm text-red-600 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.role.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Full Name */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Full Name
@@ -136,29 +175,33 @@ export default function RegisterPage() {
                   <Input
                     type="text"
                     placeholder="Enter your full name"
-                    {...register("name", {
-                      required: "Name is required",
-                      minLength: {
-                        value: 2,
-                        message: "Name must be at least 2 characters",
-                      },
-                    })}
-                    className={`pl-10 h-12 border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 ${
-                      errors.name
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                        : ""
-                    }`}
+                    {...register("name", { required: "Name is required" })}
+                    className="pl-10 h-12"
                   />
                 </div>
-                {errors.name && (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.name.message}
-                  </p>
-                )}
               </div>
 
-              {/* Email Field */}
+              {/* Company Name (only for employer) */}
+              {role === "employer" && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Company Name
+                  </label>
+                  <div className="relative">
+                    <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      type="text"
+                      placeholder="Enter your company name"
+                      {...register("companyName", {
+                        required: "Company name is required",
+                      })}
+                      className="pl-10 h-12"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Email */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Email Address
@@ -175,22 +218,12 @@ export default function RegisterPage() {
                         message: "Invalid email address",
                       },
                     })}
-                    className={`pl-10 h-12 border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 ${
-                      errors.email
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                        : ""
-                    }`}
+                    className="pl-10 h-12"
                   />
                 </div>
-                {errors.email && (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.email.message}
-                  </p>
-                )}
               </div>
 
-              {/* Password Field */}
+              {/* Password */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Password
@@ -199,7 +232,7 @@ export default function RegisterPage() {
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Create a strong password"
+                    placeholder="Create a password"
                     {...register("password", {
                       required: "Password is required",
                       minLength: {
@@ -207,16 +240,12 @@ export default function RegisterPage() {
                         message: "Password must be at least 8 characters",
                       },
                     })}
-                    className={`pl-10 pr-10 h-12 border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 ${
-                      errors.password
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                        : ""
-                    }`}
+                    className="pl-10 pr-10 h-12"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -225,37 +254,22 @@ export default function RegisterPage() {
                     )}
                   </button>
                 </div>
-
-                {/* Password Strength Indicator */}
                 {password && (
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-gray-200 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.color}`}
-                          style={{
-                            width: `${(passwordStrength.strength / 5) * 100}%`,
-                          }}
-                        ></div>
-                      </div>
-                      {passwordStrength.label && (
-                        <span className="text-xs font-medium text-gray-600">
-                          {passwordStrength.label}
-                        </span>
-                      )}
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 bg-gray-200 h-2 rounded-full">
+                      <div
+                        className={`h-2 rounded-full ${passwordStrength.color}`}
+                        style={{
+                          width: `${(passwordStrength.strength / 5) * 100}%`,
+                        }}
+                      ></div>
                     </div>
+                    <span className="text-xs">{passwordStrength.label}</span>
                   </div>
-                )}
-
-                {errors.password && (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.password.message}
-                  </p>
                 )}
               </div>
 
-              {/* Confirm Password Field */}
+              {/* Confirm Password */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Confirm Password
@@ -268,16 +282,12 @@ export default function RegisterPage() {
                     {...register("confirmPassword", {
                       required: "Please confirm your password",
                     })}
-                    className={`pl-10 pr-10 h-12 border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 ${
-                      errors.confirmPassword
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                        : ""
-                    }`}
+                    className="pl-10 pr-10 h-12"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -286,19 +296,13 @@ export default function RegisterPage() {
                     )}
                   </button>
                 </div>
-                {errors.confirmPassword && (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.confirmPassword.message}
-                  </p>
-                )}
               </div>
 
-              {/* Submit Button */}
+              {/* Submit */}
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-12 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+                className="w-full h-12"
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">
@@ -314,38 +318,13 @@ export default function RegisterPage() {
               </Button>
             </form>
 
-            {/* Features */}
-            <div className="pt-4 border-t border-gray-200">
-              <p className="text-xs text-gray-500 text-center mb-3">
-                What you'll get:
-              </p>
-              <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3 text-emerald-500" />
-                  <span>Job alerts</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3 text-emerald-500" />
-                  <span>Profile builder</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3 text-emerald-500" />
-                  <span>Application tracking</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3 text-emerald-500" />
-                  <span>Career insights</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Login Link */}
+            {/* Footer Links */}
             <div className="text-center pt-4 border-t border-gray-200">
               <p className="text-sm text-gray-600">
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+                  className="font-medium text-emerald-600 hover:text-emerald-700"
                 >
                   Sign in here
                 </Link>
@@ -353,24 +332,6 @@ export default function RegisterPage() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Trust Indicators */}
-        <div className="mt-8 text-center">
-          <div className="flex justify-center items-center gap-4 text-xs text-gray-500">
-            <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-emerald-500" />
-              <span>Secure & Private</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-emerald-500" />
-              <span>No Spam</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-emerald-500" />
-              <span>Free Forever</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -5,10 +5,11 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function POST(req) {
-  const { jobId } = await req.json();
-
+  const data = await req.json();
+  const jobId = await data.formData.jobId;
+  const formData = data.formData;
   const userId = await JwtVerify();
-  console.log(userId);
+  console.log("jobId:", jobId, "userId:", userId);
   if (!jobId || !userId) {
     return NextResponse.json(
       { message: "userID and JobID invalid" },
@@ -16,20 +17,34 @@ export async function POST(req) {
     );
   }
 
-  const exist = await prisma.applications.findFirst({
-    where: { jobId, userId },
-  });
   // Already applied
-  if (exist) {
-    return NextResponse.json({ message: "Already applied" }, { status: 500 });
-  }
+
   try {
+    const exist = await prisma.applications.findFirst({
+      where: { jobId, userId },
+    });
+    console.log("exist", exist);
+    if (exist) {
+      return NextResponse.json({ message: "Already applied" }, { status: 409 });
+    }
     const apply = await prisma.applications.create({
       data: {
         jobId,
         userId,
+        fullName: formData.fullName,
+        phone: formData.phone,
+        location: formData.location,
+        resume: formData.resume,
+        coverLetter: formData.coverLetter,
+        experience: formData.experience,
+        skills: formData.skills,
+        portfolio: formData.portfolio,
+        linkedIn: formData.linkedIn,
+        expectedSalary: formData.expectedSalary,
+        available: formData.availableFrom, // নাম মেলাতে হবে
       },
     });
+    console.log("apply", apply);
     await redis.del(`job:${jobId}`);
     return NextResponse.json(apply, { status: 201 });
   } catch (error) {
@@ -47,12 +62,12 @@ export async function GET(req) {
   try {
     const cached = await redis.get(`apply:${userId}`);
     if (cached) {
-      return NextResponse.json(cached, { status: 201 });
+      return NextResponse.json(JSON.parse(cached), { status: 201 });
     }
 
     const applies = await prisma.applications.findMany({
       where: { userId },
-      include: { job: true },
+      include: { user: true, job: true },
     });
 
     await redis.set(`apply:${userId}`, JSON.stringify(applies), "EX", 60 * 10);

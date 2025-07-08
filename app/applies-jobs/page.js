@@ -33,9 +33,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
+import { Trash2Icon } from "lucide-react";
 
 const statusColors = {
-  pending: {
+  Pending: {
     bg: "bg-yellow-50",
     text: "text-yellow-700",
     border: "border-yellow-200",
@@ -76,7 +77,6 @@ export default function ApplicationsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  console.log(user);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -97,8 +97,8 @@ export default function ApplicationsPage() {
         });
         if (appsRes.ok) {
           const appsData = await appsRes.json();
-          setApplications(JSON.parse(appsData));
-          setFilteredApplications(JSON.parse(appsData));
+          setApplications(appsData);
+          setFilteredApplications(appsData);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -133,31 +133,30 @@ export default function ApplicationsPage() {
   }, [applications, searchTerm, statusFilter]);
 
   const handleWithdraw = async (applicationId) => {
-    if (!confirm("Are you sure you want to withdraw this application?")) return;
+    if (
+      !confirm("Are you sure you want to withdraw (delete) this application?")
+    )
+      return;
 
     try {
       const response = await fetch(`/api/apply/${applicationId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "withdrawn" }),
+        method: "DELETE",
       });
 
       if (response.ok) {
         setApplications((prev) =>
-          prev.map((app) =>
-            app.id === applicationId ? { ...app, status: "withdrawn" } : app
-          )
+          prev.filter((app) => app.id !== applicationId)
         );
       }
     } catch (error) {
-      console.error("Error withdrawing application:", error);
+      console.error("Error deleting application:", error);
     }
   };
 
   const getStatusStats = () => {
     const stats = {
       total: applications.length,
-      pending: applications.filter((app) => app.status === "pending").length,
+      pending: applications.filter((app) => app.status === "Pending").length,
       reviewing: applications.filter((app) => app.status === "reviewing")
         .length,
       accepted: applications.filter((app) => app.status === "accepted").length,
@@ -178,8 +177,6 @@ export default function ApplicationsPage() {
   }
 
   const stats = getStatusStats();
-  console.log("filter:", filteredApplications);
-  console.log("apply:", applications);
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
       {/* Header */}
@@ -328,118 +325,96 @@ export default function ApplicationsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="space-y-6">
-              {filteredApplications.map((application) => {
-                const statusConfig =
-                  statusColors[application.status] || statusColors.pending;
-                const StatusIcon = statusConfig.icon;
+            <Card className="bg-white/95 backdrop-blur-sm border-2 shadow-md hover:shadow-xl transition-all duration-300">
+              <CardContent className="px-6 py-4">
+                <div className="overflow-x-auto">
+                  <table className="min-w-full table-auto text-sm text-left text-gray-700">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="px-2 py-2">Title</th>
+                        <th className="px-2 py-2">Company</th>
+                        <th className="px-2 py-2">Location</th>
+                        <th className="px-2 py-2">Applied</th>
+                        <th className="px-2 py-2">Status</th>
+                        <th className="px-2 py-2">Salary</th>
+                        <th className="px-2 py-2">Available From</th>
+                        <th className="px-2 py-2 text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredApplications.map((application) => {
+                        const statusConfig =
+                          statusColors[application.status] ||
+                          statusColors.pending;
+                        const StatusIcon = statusConfig.icon;
 
-                return (
-                  <Card
-                    key={application.id}
-                    className="bg-white/95 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-start gap-4">
-                          <div className="w-14 h-14 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                            {application?.job.title?.charAt(0).toUpperCase() ||
-                              "J"}
-                          </div>
-                          <div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-1">
-                              {application.job.title}
-                            </h3>
-                            <p className="text-gray-600 font-medium flex items-center gap-1 mb-2">
-                              <Building className="w-4 h-4" />
-                              {application.job.company}
-                            </p>
-                            <div className="flex items-center gap-4 text-sm text-gray-500">
-                              <div className="flex items-center gap-1">
-                                <MapPin className="w-4 h-4" />
-                                {application.job.location}
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
-                                Applied{" "}
-                                {new Date(
-                                  application.applyDate
-                                ).toLocaleDateString()}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Badge
-                            className={`${statusConfig.bg} ${statusConfig.text} ${statusConfig.border} border font-medium`}
+                        return (
+                          <tr
+                            key={application.id}
+                            className="border-b hover:bg-gray-50"
                           >
-                            <StatusIcon className="w-3 h-3 mr-1" />
-                            {application.status.charAt(0).toUpperCase() +
-                              application.status.slice(1)}
-                          </Badge>
-                        </div>
-                      </div>
-
-                      {application.coverLetter && (
-                        <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-                          <p className="text-sm text-gray-700 line-clamp-2">
-                            {application.coverLetter}
-                          </p>
-                        </div>
-                      )}
-
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                          {application.expectedSalary && (
-                            <div className="flex items-center gap-1">
-                              <span className="text-emerald-600 font-semibold">
-                                {application.job.salary}
-                              </span>
-                            </div>
-                          )}
-                          {application.availableFrom && (
-                            <div className="flex items-center gap-1">
-                              <Calendar className="w-4 h-4" />
-                              Available from{" "}
+                            <td className="px-2 py-2 font-semibold text-gray-900">
+                              {application.job.title}
+                            </td>
+                            <td className="px-2 py-2">
+                              {application.job.company}
+                            </td>
+                            <td className="px-2 py-2">
+                              {application.job.location}
+                            </td>
+                            <td className="px-2 py-2">
                               {new Date(
-                                application.availableFrom
+                                application.applyDate
                               ).toLocaleDateString()}
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {application.jobId && (
-                            <Link
-                              href={`/job/${application.job.title}?id=${application.jobId}`}
-                            >
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="bg-transparent"
+                            </td>
+                            <td className="px-2 py-2">
+                              <span
+                                className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium border ${statusConfig.bg} ${statusConfig.text} ${statusConfig.border}`}
                               >
-                                <Eye className="w-4 h-4 mr-1" />
-                                View Job
-                              </Button>
-                            </Link>
-                          )}
-                          {application.status === "pending" && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleWithdraw(application.id)}
-                              className="text-red-600 hover:text-red-700 hover:bg-red-50 bg-transparent"
-                            >
-                              <Trash2 className="w-4 h-4 mr-1" />
-                              Withdraw
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+                                <StatusIcon className="w-3 h-3" />
+                                {application.status}
+                              </span>
+                            </td>
+                            <td className="px-2 py-2 text-emerald-600 font-semibold">
+                              {application.job.salary || "-"}
+                            </td>
+                            <td className="px-2 py-2">
+                              {application.available
+                                ? new Date(
+                                    application.available
+                                  ).toLocaleDateString()
+                                : "-"}
+                            </td>
+                            <td className="px-2 py-2 flex gap-2 justify-center">
+                              <Link
+                                className="cursor-pointer"
+                                href={`/job/${application.job.title}?id=${application.jobId}`}
+                              >
+                                <Button size="sm" variant="outline">
+                                  <Eye className="w-4 h-4 mr-1 cursor-pointer" />
+                                  View
+                                </Button>
+                              </Link>
+                              {application.status === "Pending" && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleWithdraw(application.id)}
+                                  className="text-red-600 cursor-pointer hover:text-red-700 hover:bg-red-50"
+                                >
+                                  <Trash2Icon className="w-4 h-4 mr-1" />
+                                  Withdraw
+                                </Button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
           )}
         </div>
       </section>

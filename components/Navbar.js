@@ -53,7 +53,7 @@ export default function Navbar() {
     { href: "/browse-jobs", label: "Browse Jobs", icon: Briefcase },
     { href: "/post-job", label: "Post Job", icon: PlusCircle },
     { href: "/applies-jobs", label: "My Applications", icon: FileText },
-    { href: "/total-applications", label: "Applications", icon: Users },
+    { href: "/my-jobs", label: "My Jobs", icon: Users },
   ];
 
   return (
