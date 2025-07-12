@@ -62,7 +62,7 @@ export default function RegisterPage() {
           password: data.password,
           name: data.name,
           role: data.role,
-          companyName: data.role === "employer" ? data.companyName : null,
+          companyName: data.role === "EMPLOYER" ? data.companyName : null,
         }),
       });
 
@@ -182,7 +182,7 @@ export default function RegisterPage() {
               </div>
 
               {/* Company Name (only for employer) */}
-              {role === "employer" && (
+              {role === "EMPLOYER" && (
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Company Name

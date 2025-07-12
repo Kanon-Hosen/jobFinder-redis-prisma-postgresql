@@ -14,15 +14,17 @@ import {
   Loader2,
 } from "lucide-react";
 import ApplyJob from "@/components/ApplyJob";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function JobDetails() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [job, setJob] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isloading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [openModal, setopenModal] = useState(false);
-
+  const { user, loading } = useCurrentUser();
+  console.log("user", user)
   useEffect(() => {
     if (!id) return;
     setLoading(true);
@@ -38,7 +40,7 @@ export default function JobDetails() {
   }, [id]);
 
   console.log(job);
-  if (loading)
+  if (isloading)
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 flex justify-center items-center">
         <div className="text-center">
@@ -260,14 +262,24 @@ export default function JobDetails() {
                   Join {job.applies?.length || "0"} other candidates
                 </p>
               </div>
-
-              <button
-                onClick={() =>setopenModal(true)}
-                className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-4 rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 flex items-center justify-center gap-3 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
-                <Briefcase size={20} />
-                Apply Now
-              </button>
+              {loading ? (
+                <p>Loading...</p>
+              ) : (
+                <button
+                  onClick={() => {
+                    if (user?.role !== "EMPLOYER") setopenModal(true);
+                  }}
+                  disabled={user?.role === "EMPLOYER"}
+                  className={`w-full px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 font-semibold text-lg shadow-lg transform hover:-translate-y-0.5 ${
+                    user?.role === "EMPLOYER"
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl"
+                  }`}
+                >
+                  <Briefcase size={20} />
+                  Apply Now
+                </button>
+              )}
 
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <div className="flex items-center justify-between text-sm text-gray-500">
@@ -283,22 +295,7 @@ export default function JobDetails() {
                 <Building2 className="w-5 h-5 text-gray-600" />
                 About {job.company}
               </h3>
-              <div className="space-y-3 text-sm text-gray-600">
-                <div className="flex justify-between">
-                  <span>Industry</span>
-                  <span className="font-medium text-gray-900">Technology</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Company Size</span>
-                  <span className="font-medium text-gray-900">
-                    50-200 employees
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Founded</span>
-                  <span className="font-medium text-gray-900">2018</span>
-                </div>
-              </div>
+              <p>Coming soon</p>
             </div>
 
             {/* Application Stats */}

@@ -48,13 +48,46 @@ export default function Navbar() {
     setUser(null);
   };
 
-  const navLinks = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/browse-jobs", label: "Browse Jobs", icon: Briefcase },
-    { href: "/post-job", label: "Post Job", icon: PlusCircle },
-    { href: "/applies-jobs", label: "My Applications", icon: FileText },
-    { href: "/my-jobs", label: "My Jobs", icon: Users },
-  ];
+  // Replace the existing navLinks array with this role-based logic
+  const getNavLinks = () => {
+    const publicLinks = [
+      { href: "/", label: "Home", icon: Home },
+      { href: "/browse-jobs", label: "Browse Jobs", icon: Briefcase },
+    ];
+
+    if (!user) {
+      return publicLinks;
+    }
+
+    if (user.role === "SEEKER") {
+      // Employee/Job Seeker can see applications and browse jobs
+      return [
+        { href: "/", label: "Home", icon: Home },
+        { href: "/browse-jobs", label: "Browse Jobs", icon: Briefcase },
+        { href: "/applies-jobs", label: "My Applications", icon: FileText },
+      ];
+    }
+
+    if (user.role === "EMPLOYER") {
+      // Employer can post jobs and manage their jobs
+      return [
+        { href: "/", label: "Home", icon: Home },
+        { href: "/post-job", label: "Post Job", icon: PlusCircle },
+        { href: "/my-jobs", label: "My Jobs", icon: Users },
+      ];
+    }
+
+    // Default fallback - show all links
+    return [
+      { href: "/", label: "Home", icon: Home },
+      { href: "/browse-jobs", label: "Browse Jobs", icon: Briefcase },
+      { href: "/post-job", label: "Post Job", icon: PlusCircle },
+      { href: "/applies-jobs", label: "My Applications", icon: FileText },
+      { href: "/my-jobs", label: "My Jobs", icon: Users },
+    ];
+  };
+
+  const navLinks = getNavLinks();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 bg-white/90 backdrop-blur-xl supports-[backdrop-filter]:bg-white/80 shadow-sm">
@@ -240,7 +273,7 @@ export default function Navbar() {
               })}
 
               {!user && (
-                <div className="pt-4 space-y-3 border-t border-gray-200/50 mt-4">
+                <div className="pt-4 flex flex-col space-y-3 border-t border-gray-200/50 mt-4">
                   <Link href="/login" onClick={() => setIsMenuOpen(false)}>
                     <Button
                       variant="outline"

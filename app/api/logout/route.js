@@ -6,8 +6,8 @@ import redis from "@/lib/redis";
 
 export async function POST() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-
+  const sessionId = cookieStore.get("sessionId")?.value;
+  const token = await redis.get(`session:${sessionId}`);
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -18,16 +18,17 @@ export async function POST() {
       await redis.del(cacheKey);
     } catch (err) {
       // ignore invalid token
+      console.log(err.message)
     }
   }
 
   const response = NextResponse.json({ message: "Logged out" });
 
   // Expire token cookie
-  response.cookies.set("token", "", {
+  response.cookies.set("sessionId", "", {
     httpOnly: true,
     expires: new Date(0),
-    path: "/", 
+    path: "/",
   });
 
   return response;

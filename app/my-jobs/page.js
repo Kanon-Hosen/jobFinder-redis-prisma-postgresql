@@ -26,7 +26,7 @@ export default function MyJobs() {
       setError(null);
       try {
         const res = await fetch("/api/my-jobs");
-        if (!res.ok) throw new Error("Failed to fetch your jobs");
+        if (!res.ok) return;
         const data = await res.json();
         setJobs(data);
       } catch (err) {
@@ -55,6 +55,23 @@ export default function MyJobs() {
     "Internship",
   ];
 
+  const handleDelete = async (id) => {
+    if (!confirm("Are you sure you want to delete this job?")) return;
+    try {
+      const res = await fetch(`/api/jobs/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setJobs((prev) => prev.filter((job) => job.id !== id));
+      } else {
+        alert("Failed to delete the job.");
+      }
+    } catch (err) {
+      alert("An error occurred while deleting the job.");
+    }
+  };
+  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
       {/* Header */}
@@ -75,7 +92,7 @@ export default function MyJobs() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 -mt-16 relative z-10">
-        <Card className="mb-12 shadow-2xl border-0 bg-white/95 backdrop-blur-xl">
+        <Card className="mb-12 shadow-md border-0 bg-white/95 backdrop-blur-xl">
           <CardContent className="p-8">
             <div className="flex items-center gap-3 mb-6">
               <Filter className="h-5 w-5 text-indigo-600" />
@@ -153,10 +170,61 @@ export default function MyJobs() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
-              {filteredJobs.map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
+            <div className=" mb-16">
+              <table className="min-w-full bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md">
+                <thead className="bg-gray-100 text-gray-700 text-left text-sm">
+                  <tr>
+                    <th className="px-4 py-3">Title</th>
+                    <th className="px-4 py-3">Company</th>
+                    <th className="px-4 py-3">Type</th>
+                    <th className="px-4 py-3">Location</th>
+                    <th className="px-4 py-3">Posted</th>
+                    <th className="px-4 py-3">Applicants</th>
+                    <th className="px-4 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredJobs.map((job) => (
+                    <tr
+                      key={job.id}
+                      className="border-t border-gray-200 hover:bg-gray-50 transition"
+                    >
+                      <td className="px-4 py-3 font-medium text-gray-800">
+                        {job.title}
+                      </td>
+                      <td className="px-4 py-3">{job.company}</td>
+                      <td className="px-4 py-3">
+                        <Badge className="text-xs">{job.type}</Badge>
+                      </td>
+                      <td className="px-4 py-3">{job.location}</td>
+                      <td className="px-4 py-3 text-sm text-gray-500">
+                        {job.createdAt
+                          ? new Date(job.createdAt).toLocaleDateString()
+                          : "N/A"}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-600">
+                        {job.applies?.length || 0}
+                      </td>
+                      <td className="px-4 py-3 flex gap-2">
+                        <Button
+                          className="bg-green-500 text-white cursor-pointer"
+                          size="sm"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          className="cursor-pointer"
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDelete(job.id)}
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </>
         )}

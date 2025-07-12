@@ -25,6 +25,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import JobCard from "@/components/JobCard";
 import { useRouter } from "next/navigation";
+import Cta from "@/components/Cta";
 
 const stats = [
   {
@@ -352,7 +353,73 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* Featured Jobs Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <Star className="w-4 h-4" />
+              Hand-picked for you
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Featured Opportunities
+            </h2>
+            <p className="text-xl text-gray-600">
+              Premium jobs from top companies
+            </p>
+          </div>
 
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="relative">
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-emerald-200"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-emerald-600 border-t-transparent absolute top-0"></div>
+              </div>
+              <span className="ml-6 text-xl text-gray-600">
+                Curating the best opportunities...
+              </span>
+            </div>
+          ) : featuredJobs.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                {featuredJobs.map((job, index) => (
+                  <div
+                    key={index}
+                    className="transform hover:scale-105 transition-all duration-300"
+                  >
+                    <JobCard job={job} />
+                  </div>
+                ))}
+              </div>
+              <div className="text-center">
+                <Link href="/browse-jobs">
+                  <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-12 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-2xl">
+                    Discover All Opportunities
+                    <ArrowRight className="ml-3 w-5 h-5" />
+                  </Button>
+                </Link>
+              </div>
+            </>
+          ) : (
+            <Card className="text-center py-16 bg-white shadow-lg">
+              <CardContent>
+                <Briefcase className="h-16 w-16 text-gray-300 mx-auto mb-6" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  No featured jobs yet
+                </h3>
+                <p className="text-gray-600 mb-8">
+                  Be the first to post an amazing opportunity!
+                </p>
+                <Link href="/post-job">
+                  <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-8 py-3 font-semibold rounded-xl">
+                    Post the First Job
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </section>
       {/* Unique Categories Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -458,203 +525,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Jobs Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Star className="w-4 h-4" />
-              Hand-picked for you
-            </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Featured Opportunities
-            </h2>
-            <p className="text-xl text-gray-600">
-              Premium jobs from top companies
-            </p>
-          </div>
-
-          {loading ? (
-            <div className="flex justify-center items-center py-20">
-              <div className="relative">
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-emerald-200"></div>
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-emerald-600 border-t-transparent absolute top-0"></div>
-              </div>
-              <span className="ml-6 text-xl text-gray-600">
-                Curating the best opportunities...
-              </span>
-            </div>
-          ) : featuredJobs.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                {featuredJobs.map((job, index) => (
-                  <div
-                    key={index}
-                    className="transform hover:scale-105 transition-all duration-300"
-                  >
-                    <JobCard job={job} />
-                  </div>
-                ))}
-              </div>
-              <div className="text-center">
-                <Link href="/browse-jobs">
-                  <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-12 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-2xl">
-                    Discover All Opportunities
-                    <ArrowRight className="ml-3 w-5 h-5" />
-                  </Button>
-                </Link>
-              </div>
-            </>
-          ) : (
-            <Card className="text-center py-16 bg-white shadow-lg">
-              <CardContent>
-                <Briefcase className="h-16 w-16 text-gray-300 mx-auto mb-6" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  No featured jobs yet
-                </h3>
-                <p className="text-gray-600 mb-8">
-                  Be the first to post an amazing opportunity!
-                </p>
-                <Link href="/post-job">
-                  <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-8 py-3 font-semibold rounded-xl">
-                    Post the First Job
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-        </div>
-        <div className="relative max-w-5xl mx-auto px-6 text-center">
-          <h2 className="text-5xl font-bold text-white mb-6">
-            Ready to Transform
-            <span className="block text-yellow-300">Your Career?</span>
-          </h2>
-          <p className="text-xl text-emerald-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of professionals who have discovered their dream
-            careers through our platform. Your next adventure is just one click
-            away.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link href="/register">
-              <Button className="bg-white text-emerald-600 hover:bg-gray-100 px-10 py-4 text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 rounded-2xl">
-                Start Your Journey
-                <Sparkles className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-            <Link href="/browse-jobs">
-              <Button
-                variant="outline"
-                className="border-2 border-white text-white hover:bg-white hover:text-emerald-600 px-10 py-4 text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-transparent rounded-2xl"
-              >
-                Explore Opportunities
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
-                  <Briefcase className="w-6 h-6 text-white" />
-                </div>
-                <span className="font-bold text-2xl">JobFinder</span>
-              </div>
-              <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                Connecting extraordinary talent with innovative companies. Your
-                career adventure starts here.
-              </p>
-              <div className="flex space-x-4">
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors cursor-pointer">
-                  <span className="text-sm font-bold">f</span>
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors cursor-pointer">
-                  <span className="text-sm font-bold">t</span>
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors cursor-pointer">
-                  <span className="text-sm font-bold">in</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-6">For Job Seekers</h3>
-              <ul className="space-y-4 text-gray-400">
-                <li>
-                  <Link
-                    href="/browse-jobs"
-                    className="hover:text-emerald-400 transition-colors"
-                  >
-                    Browse Jobs
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/register"
-                    className="hover:text-emerald-400 transition-colors"
-                  >
-                    Create Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/career-advice"
-                    className="hover:text-emerald-400 transition-colors"
-                  >
-                    Career Advice
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-6">For Employers</h3>
-              <ul className="space-y-4 text-gray-400">
-                <li>
-                  <Link
-                    href="/post-job"
-                    className="hover:text-emerald-400 transition-colors"
-                  >
-                    Post a Job
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pricing"
-                    className="hover:text-emerald-400 transition-colors"
-                  >
-                    Pricing
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-emerald-400 transition-colors"
-                  >
-                    Contact Sales
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>
-              &copy; 2024 JobFinder. Crafted with ❤️ for dreamers and achievers.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Cta />
     </div>
   );
 }

@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
 
 const prisma = new PrismaClient();
 
 export async function POST(req) {
+  const sessionId = uuidv4();
+  console.log(sessionId);
   const body = await req.json();
   const { name, email, password, role, companyName } = body;
 
@@ -39,16 +42,16 @@ export async function POST(req) {
     }
 
     const newUser = await prisma.user.create({ data: userData });
-
+    console.log(newUser);
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
+    await redis.set(`session:${sessionId}`, token, "EX", 60 * 60 * 24 * 7);
+    const response = NextResponse.json({ success: true }, { status: 200 });
 
-    const response = NextResponse.json({ token }, { status: 200 });
-
-    response.cookies.set("token", token, {
+    response.cookies.set("sessionId", sessionId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",

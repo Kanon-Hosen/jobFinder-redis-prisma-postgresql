@@ -32,7 +32,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const jobTypes = ["Full-time", "Remote", "Part-time", "Contract", "Internship"];
+const jobTypes = ["Full-time", "Part-time", "Contract", "Internship"];
+const workSetting = ["In Person", "Remote", "Hybrid"];
 
 const benefits = [
   "Health Insurance",
@@ -91,13 +92,13 @@ export default function PostJob() {
     description: "",
     location: "",
     type: "",
+    workSetting: "",
     salary: "",
     company: "",
     requirements: "",
     benefits: [],
     experienceLevel: "",
     applicationDeadline: "",
-    contactEmail: "",
   });
 
   const handleInputChange = (field, value) => {
@@ -158,7 +159,6 @@ export default function PostJob() {
           ...formData,
           createdAt: new Date().toISOString(),
           applies: [],
-          postedBy: user.email,
         }),
       });
 
@@ -345,7 +345,7 @@ export default function PostJob() {
                       </label>
                       <Input
                         placeholder="e.g. TechCorp Inc."
-                        value={formData.company}
+                        value={user.company}
                         onChange={(e) =>
                           handleInputChange("company", e.target.value)
                         }
@@ -362,7 +362,7 @@ export default function PostJob() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                         <MapPin className="w-4 h-4" />
@@ -406,6 +406,39 @@ export default function PostJob() {
                         </SelectTrigger>
                         <SelectContent>
                           {jobTypes.map((type) => (
+                            <SelectItem key={type} value={type}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {errors.type && (
+                        <p className="text-sm text-red-600 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          {errors.type}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        Work Setting *
+                      </label>
+                      <Select
+                        value={formData?.workSetting}
+                        onValueChange={(value) =>
+                          handleInputChange("workSetting", value)
+                        }
+                      >
+                        <SelectTrigger
+                          className={`h-12 border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 ${
+                            errors.type ? "border-red-500" : ""
+                          }`}
+                        >
+                          <SelectValue placeholder="Select job type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {workSetting.map((type) => (
                             <SelectItem key={type} value={type}>
                               {type}
                             </SelectItem>

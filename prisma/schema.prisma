@@ -8,36 +8,41 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(cuid())
-  name         String
-  email        String         @unique
-  password     String
-  role         Role           @default(SEEKER)
-  companyName  String?        // only required for EMPLOYER
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  jobPost     Jobs[]          // for EMPLOYER
-  applies Applications[]  // for SEEKER
+  id          String         @id @default(cuid())
+  name        String
+  email       String         @unique
+  password    String
+  role        Role           @default(SEEKER)
+  companyName String? // only required for EMPLOYER
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  jobPost     Jobs[] // for EMPLOYER
+  applies     Applications[] // for SEEKER
 }
+
 enum Role {
   SEEKER
   EMPLOYER
 }
+
 model Jobs {
-  id           String         @id @default(cuid())
-  title        String
-  description  String
-  type         String
-  company      String
-  requirements String
-  salary       String
-  benefits     String[]
-  location     String
-  userId       String
-  user         User           @relation(fields: [userId], references: [id])
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  applies      Applications[]
+  id                  String         @id @default(cuid())
+  title               String
+  description         String
+  type                String
+  workSetting         String
+  company             String
+  requirements        String
+  salary              String
+  benefits            String[]
+  location            String
+  applicationDeadline String
+  experienceLevel     String
+  userId              String
+  user                User           @relation(fields: [userId], references: [id])
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  applies             Applications[]
 }
 
 model Applications {

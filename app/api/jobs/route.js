@@ -1,3 +1,4 @@
+import JwtVerify from "@/hooks/JwtVerify";
 import redis from "@/lib/redis";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -5,19 +6,22 @@ const prisma = new PrismaClient();
 
 export async function POST(req) {
   const userId = await JwtVerify();
-  if (!userId.ok) {
+  if (!userId ) {
     return NextResponse.json({ message: "User Unauthorized" }, { status: 400 });
   }
   try {
     const {
-      title,
-      description,
-      type,
-      location,
-      benefits,
-      salary,
-      requirements,
-      company,
+    title,
+    description,
+    location,
+    type,
+    workSetting,
+    salary,
+    company,
+    requirements,
+    benefits,
+    experienceLevel,
+    applicationDeadline,
     } = await req.json();
 
     console.log(benefits, type, salary, userId);
@@ -26,12 +30,15 @@ export async function POST(req) {
       data: {
         title,
         description,
+        location,
         type,
+        workSetting,
+        salary,
         company,
         requirements,
-        salary,
-        benefits, // String array, e.g., ['Health Insurance', 'Remote Work']
-        location,
+        benefits,
+        experienceLevel,
+        applicationDeadline,
         user: {
           connect: {
             id: userId,
