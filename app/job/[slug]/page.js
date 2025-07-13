@@ -24,7 +24,7 @@ export default function JobDetails() {
   const [error, setError] = useState(null);
   const [openModal, setopenModal] = useState(false);
   const { user, loading } = useCurrentUser();
-  console.log("user", user)
+  console.log("user", user);
   useEffect(() => {
     if (!id) return;
     setLoading(true);
@@ -92,12 +92,16 @@ export default function JobDetails() {
   // };
 
   // open modal ::::::::::::::::::::::::::::::::::::::::::::
-  
 
   if (openModal) {
-    return <ApplyJob setopenModal={setopenModal} />
+    return <ApplyJob setopenModal={setopenModal} />;
   }
 
+  const deadlineDate = new Date(job.applicationDeadline);
+  const deadlineOver = deadlineDate < new Date();
+
+  const isApplied = job.applies.some((apply) => user?.id === apply.userId);
+  console.log(isApplied);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 py-8 px-4">
@@ -262,6 +266,11 @@ export default function JobDetails() {
                   Join {job.applies?.length || "0"} other candidates
                 </p>
               </div>
+              {isApplied && (
+                <div className="flex items-center justify-center py-3 font-semibold text-green-500">
+                  <span>Already Applied</span>
+                </div>
+              )}
               {loading ? (
                 <p>Loading...</p>
               ) : (
@@ -269,9 +278,11 @@ export default function JobDetails() {
                   onClick={() => {
                     if (user?.role !== "EMPLOYER") setopenModal(true);
                   }}
-                  disabled={user?.role === "EMPLOYER"}
+                  disabled={
+                    user?.role === "EMPLOYER" || isApplied || deadlineOver
+                  }
                   className={`w-full px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 font-semibold text-lg shadow-lg transform hover:-translate-y-0.5 ${
-                    user?.role === "EMPLOYER"
+                    user?.role === "EMPLOYER" || deadlineDate
                       ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                       : "bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl"
                   }`}

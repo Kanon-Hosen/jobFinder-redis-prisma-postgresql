@@ -177,7 +177,7 @@ export default function BrowseJobs() {
 
       <div className="max-w-7xl mx-auto px-6 -mt-16 relative z-10">
         {/* Enhanced Search Section */}
-        <Card className="mb-12 shadow-2xl border-0 bg-white/95 backdrop-blur-xl">
+        <Card className="mb-12 shadow-md border-0 bg-white/95 backdrop-blur-xl">
           <CardContent className="p-8">
             {/* Advanced Search Bar */}
             <div className="relative mb-8">

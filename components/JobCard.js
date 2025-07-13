@@ -71,7 +71,23 @@ export default function JobCard({ job }) {
   const isNewJob =
     job.createdAt &&
     new Date() - new Date(job.createdAt) < 3 * 24 * 60 * 60 * 1000;
-console.log(job)
+  console.log(job);
+  // // let canApply = false;
+  // // let deadlineEnd = "No deadline";
+
+  // // if (job?.applicationDeadline) {
+  // //   // const deadlineDate = new Date(job.applicationDeadline);
+  // //   const today = new Date();
+
+  // //   if (!isNaN(deadlineDate)) {
+  // //     deadlineEnd = deadlineDate.toLocaleDateString();
+  // //     canApply = deadlineDate >= today;
+  // //   }
+  //   }
+
+  const deadlineDate =
+    new Date(job?.applicationDeadline).toLocaleDateString() < new Date();
+  console.log(deadlineDate);
   return (
     <Link href={`/job/${job.title}?id=${job.id}`}>
       <Card className="group relative bg-white border-0 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden transform hover:-translate-y-2 ">
@@ -89,13 +105,6 @@ console.log(job)
           {/* Header with company logo placeholder and badges */}
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-4">
-              {/* Company logo placeholder with gradient */}
-              <div
-                className={`w-12 h-12 bg-gradient-to-br ${jobStyle.gradient} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-300`}
-              >
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="text-lg font-bold text-gray-900 group-hover:text-gray-700 transition-colors ">
@@ -114,10 +123,10 @@ console.log(job)
               </div>
             </div>
 
-            {/* Bookmark icon */}
+            {/* Bookmark icon
             <button className="p-2 rounded-full hover:bg-gray-100 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-110">
               <Bookmark className="w-4 h-4 text-gray-400 hover:text-blue-500" />
-            </button>
+            </button> */}
           </div>
 
           {/* Job type badge with unique styling */}
@@ -238,12 +247,19 @@ console.log(job)
             <div className="flex items-center justify-between pt-3 border-t border-gray-100">
               <div className="flex items-center gap-2">
                 <CalendarDays className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-gray-600">
-                  Deadline{" "}
-                  <span className="font-semibold">
-                    {formatDate(job.applicationDeadline)}
+                {deadlineDate ? (
+                  <span className="text-sm text-gray-600">
+                    Deadline {" "}
+                    <span className="font-semibold text-red-400">End</span>
                   </span>
-                </span>
+                ) : (
+                  <span className="text-sm text-gray-600">
+                    Deadline {" "}
+                    <span className="font-semibold text-red-400">
+                      {formatDate(job.applicationDeadline)}
+                    </span>
+                  </span>
+                )}
               </div>
               <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
             </div>

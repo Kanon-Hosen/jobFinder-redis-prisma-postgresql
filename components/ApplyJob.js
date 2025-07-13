@@ -36,6 +36,7 @@ export default function ApplyJob({ setopenModal }) {
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
   const jobTitle = job?.title;
+  console.log(job, user)
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -179,7 +180,7 @@ export default function ApplyJob({ setopenModal }) {
         method: "POST",
         headers: {
           "content-type": "application/json",
-        }, 
+        },
         body: JSON.stringify({ formData }),
       });
 
@@ -242,7 +243,12 @@ export default function ApplyJob({ setopenModal }) {
       </div>
     );
   }
-
+  const deadlineDate =
+    new Date(job?.applicationDeadline).toLocaleDateString() >= new Date();
+  
+  if (deadlineDate) {
+     router.push("/")
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
       {/* Header */}

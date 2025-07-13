@@ -72,6 +72,7 @@ export default function Navbar() {
       // Employer can post jobs and manage their jobs
       return [
         { href: "/", label: "Home", icon: Home },
+        { href: "/browse-jobs", label: "Browse Jobs", icon: Briefcase },
         { href: "/post-job", label: "Post Job", icon: PlusCircle },
         { href: "/my-jobs", label: "My Jobs", icon: Users },
       ];

@@ -1,330 +1,328 @@
 "use client";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Eye,
   EyeOff,
+  User,
   Mail,
   Lock,
-  User,
-  Sparkles,
-  CheckCircle,
-  AlertCircle,
-  Loader2,
-  Building2,
+  Building,
+  UserCheck,
   Briefcase,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 export default function RegisterPage() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm();
   const router = useRouter();
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "SEEKER",
+    companyName: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const password = watch("password");
-  const role = watch("role");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  const onSubmit = async (data) => {
-    if (data.password !== data.confirmPassword) {
+  const handleRoleChange = (role) => {
+    setFormData((prev) => ({
+      ...prev,
+      role,
+      companyName: role === "SEEKER" ? "" : prev.companyName,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
-    setIsLoading(true);
-    setError("");
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
+    if (formData.role === "EMPLOYER" && !formData.companyName.trim()) {
+      setError("Company name is required for employers");
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      const res = await fetch("/api/register", {
+      const response = await fetch("/api/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          name: data.name,
-          role: data.role,
-          companyName: data.role === "EMPLOYER" ? data.companyName : null,
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role,
+          companyName:
+            formData.role === "EMPLOYER" ? formData.companyName : undefined,
         }),
       });
 
-      if (res.ok) {
+      const data = await response.json();
+
+      if (response.ok) {
         router.push("/");
       } else {
-        const err = await res.json();
-        setError(err.message || "Registration failed");
+        setError(data.error || "Registration failed");
       }
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
+    } catch (error) {
+      setError("An error occurred. Please try again.");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const getPasswordStrength = (password) => {
-    if (!password) return { strength: 0, label: "", color: "" };
-
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-    const levels = [
-      { strength: 0, label: "", color: "" },
-      { strength: 1, label: "Very Weak", color: "bg-red-500" },
-      { strength: 2, label: "Weak", color: "bg-orange-500" },
-      { strength: 3, label: "Fair", color: "bg-yellow-500" },
-      { strength: 4, label: "Good", color: "bg-emerald-500" },
-      { strength: 5, label: "Strong", color: "bg-green-600" },
-    ];
-
-    return levels[strength];
-  };
-
-  const passwordStrength = getPasswordStrength(password);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
+        {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Sparkles className="w-4 h-4" />
-            Join thousands of professionals
+          <div className="inline-flex items-center gap-3 bg-purple-100 rounded-full px-6 py-3 mb-6">
+            <UserCheck className="w-5 h-5 text-purple-600" />
+            <span className="text-purple-700 font-medium">
+              Join Our Community
+            </span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Create Your Account
           </h1>
-          <p className="text-gray-600">Start your career journey today</p>
+          <p className="text-gray-600">
+            Start your journey to find the perfect job or hire top talent
+          </p>
         </div>
 
-        <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
-          <CardHeader className="space-y-1 pb-4">
-            <div className="flex items-center justify-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
-                <User className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-semibold text-lg text-gray-900">
-                Sign Up
-              </span>
+        <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
+          <CardHeader className="space-y-6">
+            <CardTitle className="text-center text-xl font-semibold text-gray-900">
+              Choose Your Account Type
+            </CardTitle>
+
+            {/* Role Selection */}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => handleRoleChange("SEEKER")}
+                className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                  formData.role === "SEEKER"
+                    ? "border-purple-500 bg-purple-50 shadow-lg"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <User
+                  className={`w-6 h-6 mx-auto mb-2 ${
+                    formData.role === "SEEKER"
+                      ? "text-purple-600"
+                      : "text-gray-400"
+                  }`}
+                />
+                <div className="text-sm font-medium text-gray-900">
+                  Job Seeker
+                </div>
+                <div className="text-xs text-gray-500">Find your dream job</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleRoleChange("EMPLOYER")}
+                className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                  formData.role === "EMPLOYER"
+                    ? "border-purple-500 bg-purple-50 shadow-lg"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <Briefcase
+                  className={`w-6 h-6 mx-auto mb-2 ${
+                    formData.role === "EMPLOYER"
+                      ? "text-purple-600"
+                      : "text-gray-400"
+                  }`}
+                />
+                <div className="text-sm font-medium text-gray-900">
+                  Employer
+                </div>
+                <div className="text-xs text-gray-500">Hire top talent</div>
+              </button>
             </div>
           </CardHeader>
+
           <CardContent className="space-y-6">
-            {error && (
-              <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span className="text-sm">{error}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              {/* Role Selection */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
-                  You are signing up as
-                </label>
-                <Select onValueChange={(value) => setValue("role", value)}>
-                  <SelectTrigger className="w-full h-12">
-                    <SelectValue placeholder="Select role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="SEEKER">
-                      <Briefcase className="w-4 h-4 inline mr-2" />
-                      Looking for a job
-                    </SelectItem>
-                    <SelectItem value="EMPLOYER">
-                      <Building2 className="w-4 h-4 inline mr-2" />
-                      Hiring for a role
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.role && (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {errors.role.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Full Name */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Name Field */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                   <Input
                     type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     placeholder="Enter your full name"
-                    {...register("name", { required: "Name is required" })}
-                    className="pl-10 h-12"
+                    required
+                    className="pl-10 h-12 border-2 border-gray-200 focus:border-purple-500 rounded-xl"
                   />
                 </div>
               </div>
 
-              {/* Company Name (only for employer) */}
-              {role === "EMPLOYER" && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Company Name
-                  </label>
-                  <div className="relative">
-                    <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                    <Input
-                      type="text"
-                      placeholder="Enter your company name"
-                      {...register("companyName", {
-                        required: "Company name is required",
-                      })}
-                      className="pl-10 h-12"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Email */}
+              {/* Email Field */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                   <Input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     placeholder="Enter your email"
-                    {...register("email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        message: "Invalid email address",
-                      },
-                    })}
-                    className="pl-10 h-12"
+                    required
+                    className="pl-10 h-12 border-2 border-gray-200 focus:border-purple-500 rounded-xl"
                   />
                 </div>
               </div>
 
-              {/* Password */}
+              {/* Company Name Field (for Employers) */}
+              {formData.role === "EMPLOYER" && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Company Name
+                  </label>
+                  <div className="relative">
+                    <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Input
+                      type="text"
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleChange}
+                      placeholder="Enter your company name"
+                      required
+                      className="pl-10 h-12 border-2 border-gray-200 focus:border-purple-500 rounded-xl"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Password Field */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                   <Input
                     type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     placeholder="Create a password"
-                    {...register("password", {
-                      required: "Password is required",
-                      minLength: {
-                        value: 8,
-                        message: "Password must be at least 8 characters",
-                      },
-                    })}
-                    className="pl-10 pr-10 h-12"
+                    required
+                    className="pl-10 pr-10 h-12 border-2 border-gray-200 focus:border-purple-500 rounded-xl"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
+                      <EyeOff className="h-5 w-5" />
                     ) : (
-                      <Eye className="h-4 w-4" />
+                      <Eye className="h-5 w-5" />
                     )}
                   </button>
                 </div>
-                {password && (
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 bg-gray-200 h-2 rounded-full">
-                      <div
-                        className={`h-2 rounded-full ${passwordStrength.color}`}
-                        style={{
-                          width: `${(passwordStrength.strength / 5) * 100}%`,
-                        }}
-                      ></div>
-                    </div>
-                    <span className="text-xs">{passwordStrength.label}</span>
-                  </div>
-                )}
               </div>
 
-              {/* Confirm Password */}
+              {/* Confirm Password Field */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Confirm Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                   <Input
                     type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
                     placeholder="Confirm your password"
-                    {...register("confirmPassword", {
-                      required: "Please confirm your password",
-                    })}
-                    className="pl-10 pr-10 h-12"
+                    required
+                    className="pl-10 pr-10 h-12 border-2 border-gray-200 focus:border-purple-500 rounded-xl"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4" />
+                      <EyeOff className="h-5 w-5" />
                     ) : (
-                      <Eye className="h-4 w-4" />
+                      <Eye className="h-5 w-5" />
                     )}
                   </button>
                 </div>
               </div>
 
-              {/* Submit */}
+              {/* Error Message */}
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+                  <p className="text-red-600 text-sm">{error}</p>
+                </div>
+              )}
+
+              {/* Submit Button */}
               <Button
                 type="submit"
-                disabled={isLoading}
-                className="w-full h-12"
+                disabled={loading}
+                className="w-full h-12 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                {isLoading ? (
+                {loading ? (
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                     Creating Account...
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4" />
-                    Create Account
-                  </div>
+                  "Create Account"
                 )}
               </Button>
             </form>
 
-            {/* Footer Links */}
+            {/* Login Link */}
             <div className="text-center pt-4 border-t border-gray-200">
-              <p className="text-sm text-gray-600">
+              <p className="text-gray-600">
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="font-medium text-emerald-600 hover:text-emerald-700"
+                  className="text-purple-600 hover:text-purple-700 font-medium"
                 >
                   Sign in here
                 </Link>
