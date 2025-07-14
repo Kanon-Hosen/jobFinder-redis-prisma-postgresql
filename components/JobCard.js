@@ -90,7 +90,7 @@ export default function JobCard({ job }) {
   console.log(deadlineDate);
   return (
     <Link href={`/job/${job.title}?id=${job.id}`}>
-      <Card className="group relative bg-white border-0 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden transform hover:-translate-y-2 ">
+      <Card className="group relative bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer overflow-hidden transform hover:-translate-y-2 ">
         {/* Animated background gradient */}
         <div
           className={`absolute inset-0 bg-gradient-to-br ${jobStyle.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
@@ -101,7 +101,7 @@ export default function JobCard({ job }) {
           className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl ${jobStyle.gradient} opacity-10 rounded-bl-full`}
         />
 
-        <CardContent className="relative p-6 space-y-4">
+        <CardContent className="relative px-6 py-3 space-y-4">
           {/* Header with company logo placeholder and badges */}
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-4">
@@ -111,7 +111,7 @@ export default function JobCard({ job }) {
                     {job.title || "Job Title"}
                   </h3>
                   {isNewJob && (
-                    <Badge className="bg-green-500 text-white text-xs px-2 py-0.5">
+                    <Badge className="bg-green-500 absolute -top-2 right-4 text-white text-xs px-2 py-0.5">
                       <Zap className="w-3 h-3 mr-1" />
                       NEW
                     </Badge>
@@ -211,7 +211,7 @@ export default function JobCard({ job }) {
                   </div>
                   <div className="flex flex-col">
                     <span className="font-bold text-gray-900 text-sm">
-                      ${Number(job.salary).toLocaleString()}
+                      ${job.salary.toLocaleString()}
                     </span>
                     <span className="text-xs text-gray-500">per year</span>
                   </div>

@@ -83,7 +83,7 @@ export default function BrowseJobs() {
     {
       type: "Remote",
       icon: "",
-      count: jobs.filter((j) => j.type === "Remote").length,
+      count: jobs.filter((j) => j.workSetting === "Remote").length,
     },
     {
       type: "Part-time",
@@ -137,7 +137,7 @@ export default function BrowseJobs() {
               </div>
             </div>
 
-            <h1 className="text-6xl md:text-7xl font-black text-white mb-6 leading-tight">
+            <h1 className="text-5xl w-full md:text-6xl font-black text-white mb-6 leading-tight">
               Discover Your
               <span className="block bg-gradient-to-r from-yellow-300 via-orange-400 to-red-400 bg-clip-text text-transparent">
                 Dream Career
@@ -175,9 +175,9 @@ export default function BrowseJobs() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 -mt-16 relative z-10">
+      <div className="max-w-7xl  mx-auto px-6 -mt-16 relative z-10">
         {/* Enhanced Search Section */}
-        <Card className="mb-12 shadow-md border-0 bg-white/95 backdrop-blur-xl">
+        <Card className="mb-12  shadow-md border-0 bg-white/95 backdrop-blur-xl">
           <CardContent className="p-8">
             {/* Advanced Search Bar */}
             <div className="relative mb-8">
@@ -192,7 +192,7 @@ export default function BrowseJobs() {
                 className="pl-16 h-16 text-lg border-2 border-gray-100 bg-gray-50/50 focus:bg-white focus:border-emerald-300 transition-all duration-300 rounded-2xl shadow-sm"
               />
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-                <Badge className="bg-emerald-100 text-emerald-700 border-0">
+                <Badge className="bg-emerald-100  text-emerald-700 border-0">
                   <Sparkles className="w-3 h-3 mr-1" />
                   AI Powered
                 </Badge>
@@ -239,27 +239,6 @@ export default function BrowseJobs() {
               </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="mt-6 flex flex-wrap gap-2">
-              <span className="text-sm text-gray-500 font-medium">
-                Quick filters:
-              </span>
-              {[
-                "Remote Only",
-                "High Salary",
-                "New Postings",
-                "Top Companies",
-              ].map((quick) => (
-                <Button
-                  key={quick}
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full border-gray-300 hover:bg-emerald-50 hover:border-emerald-300 text-xs bg-transparent"
-                >
-                  {quick}
-                </Button>
-              ))}
-            </div>
           </CardContent>
         </Card>
 
@@ -325,13 +304,10 @@ export default function BrowseJobs() {
           <>
             {/* Enhanced Results Header */}
             <div className="mb-8 p-8 bg-white rounded-2xl shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between mb-4">
+              <div className="md:flex items-center justify-between mb-4">
                 <div>
                   <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                    <span className="text-emerald-600">
-                      {filteredJobs.length}
-                    </span>{" "}
-                    opportunities found
+                    {filteredJobs.length} opportunities found
                   </h2>
                   <p className="text-gray-600">
                     Showing {filter !== "All" ? filter.toLowerCase() : "all"}{" "}
@@ -363,21 +339,6 @@ export default function BrowseJobs() {
                 </div>
               </div>
 
-              {/* Search insights */}
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200">
-                  <TrendingUp className="w-3 h-3 mr-1" />
-                  High demand
-                </Badge>
-                <Badge className="bg-orange-50 text-orange-700 border-orange-200">
-                  <Clock className="w-3 h-3 mr-1" />
-                  Recently posted
-                </Badge>
-                <Badge className="bg-violet-50 text-violet-700 border-violet-200">
-                  <Star className="w-3 h-3 mr-1" />
-                  Top companies
-                </Badge>
-              </div>
             </div>
 
             {/* Jobs Grid with Animation */}

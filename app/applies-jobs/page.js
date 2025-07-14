@@ -50,6 +50,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import Loading from "@/components/Loading";
 
 const statusStyles = {
   Pending: {
@@ -211,22 +212,7 @@ export default function ApplicationsPage() {
   };
 
   if (isloading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative mb-8">
-            <div className="animate-spin rounded-full h-20 w-20 border-4 border-emerald-200"></div>
-            <div className="animate-spin rounded-full h-20 w-20 border-4 border-emerald-600 border-t-transparent absolute top-0"></div>
-          </div>
-          <div className="space-y-2">
-            <p className="text-2xl font-semibold text-gray-700">
-              Loading your applications...
-            </p>
-            <p className="text-gray-500">Fetching your career journey data</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <Loading/>
   }
 
   const stats = getStatusStats();

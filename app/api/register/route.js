@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
+import redis from "@/lib/redis";
 
 const prisma = new PrismaClient();
 
@@ -57,6 +58,7 @@ export async function POST(req) {
       path: "/",
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
+    await redis.del("users");
 
     return response;
   } catch (error) {

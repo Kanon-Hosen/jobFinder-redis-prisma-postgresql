@@ -217,8 +217,8 @@ export default function JobApplications() {
                   <div
                     className={`flex items-center gap-2 ${
                       isDeadlinePassed(selectedJob.applicationDeadline)
-                        ? "text-red-300"
-                        : "text-orange-300"
+                        ? "text-red-500"
+                        : "text-orange-500"
                     }`}
                   >
                     <Target className="w-4 h-4 flex-shrink-0" />
@@ -261,7 +261,7 @@ export default function JobApplications() {
                         Salary:
                       </span>
                       <p className="font-semibold text-white break-words">
-                        {formatSalary(selectedJob.salary)}
+                        ${selectedJob.salary || 0}
                       </p>
                     </div>
                   </div>

@@ -31,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Loading from "@/components/Loading";
 
 const jobTypes = ["Full-time", "Part-time", "Contract", "Internship"];
 const workSetting = ["In Person", "Remote", "Hybrid"];
@@ -209,14 +210,7 @@ export default function PostJob() {
   }
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-emerald-600 mx-auto mb-4" />
-          <p className="text-lg text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
+    return <Loading/>
   }
 
   return (
