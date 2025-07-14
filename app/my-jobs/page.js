@@ -377,7 +377,7 @@ export default function MyJobs() {
                     </h2>
                     <p className="text-gray-600">
                       Showing {filter !== "All" ? filter.toLowerCase() : "all"}{" "}
-                      positions you've posted
+                      positions you`&apos;`ve posted
                     </p>
                   </div>
                   <div className="flex items-center gap-4">

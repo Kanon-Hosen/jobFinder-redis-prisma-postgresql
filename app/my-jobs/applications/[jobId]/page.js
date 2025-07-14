@@ -308,8 +308,8 @@ export default function JobApplications() {
                   No applications yet
                 </h3>
                 <p className="text-gray-600 text-sm sm:text-base lg:text-lg px-4">
-                  This job hasn't received any applications yet. Share the job
-                  posting to attract candidates.
+                  This job hasn`&apos;`t received any applications yet. Share
+                  the job posting to attract candidates.
                 </p>
               </div>
             ) : (

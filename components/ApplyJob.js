@@ -221,7 +221,7 @@ export default function ApplyJob({ setopenModal }) {
             <div className="flex items-center justify-center gap-2 text-emerald-600 mb-4">
               <Sparkles className="w-4 h-4" />
               <span className="text-sm font-medium">
-                We'll notify you of any updates
+                We`&apos;`ll notify you of any updates
               </span>
             </div>
             <p className="text-sm text-gray-500">
@@ -286,7 +286,8 @@ export default function ApplyJob({ setopenModal }) {
 
               <p className="text-xl text-emerald-100 mb-4 max-w-3xl mx-auto leading-relaxed">
                 Take the next step in your career journey. Fill out the
-                application below and showcase why you're the perfect fit.
+                application below and showcase why you`&apos;`re the perfect
+                fit.
               </p>
             </div>
           </div>
@@ -316,7 +317,7 @@ export default function ApplyJob({ setopenModal }) {
                         Application Form
                       </CardTitle>
                       <p className="text-gray-600">
-                        Tell us about yourself and why you're interested
+                        Tell us about yourself and why you`&apos;`re interested
                       </p>
                     </div>
                   </div>

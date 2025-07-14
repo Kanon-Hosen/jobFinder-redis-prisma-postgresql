@@ -238,7 +238,6 @@ export default function BrowseJobs() {
                 ))}
               </div>
             </div>
-
           </CardContent>
         </Card>
 
@@ -280,7 +279,7 @@ export default function BrowseJobs() {
                 No matches found
               </h3>
               <p className="text-gray-600 text-lg mb-3">
-                We couldn't find any jobs matching your criteria.
+                We couldn`&apos;`t find any jobs matching your criteria.
               </p>
               <p className="text-gray-500 mb-8">
                 Try adjusting your search terms or filters to discover more
@@ -315,11 +314,11 @@ export default function BrowseJobs() {
                     {searchTerm && (
                       <span>
                         {" "}
-                        matching "
+                        matching `&quot;`
                         <span className="font-semibold text-gray-900">
                           {searchTerm}
                         </span>
-                        "
+                        `&quot;`
                       </span>
                     )}
                   </p>
@@ -338,7 +337,6 @@ export default function BrowseJobs() {
                   </Button>
                 </div>
               </div>
-
             </div>
 
             {/* Jobs Grid with Animation */}
