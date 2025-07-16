@@ -28,7 +28,7 @@ const stats = [
   {
     icon: TrendingUp,
     label: "Success Rate",
-    value: "95%",
+    value: "12,000+",
     color: "bg-teal-500",
   },
 ];
