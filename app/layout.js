@@ -23,11 +23,11 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
         <Navbar />
 
-        <main className=" mx-auto px-4 py-6">{children}</main>
+        <main className=" mx-auto md:px-4 md:py-6 overflow-x-hidden">{children}</main>
         <Footer />
       </body>
     </html>

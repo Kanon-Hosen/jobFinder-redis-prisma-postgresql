@@ -170,10 +170,10 @@ export default function JobApplications() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 p-3 sm:p-4 lg:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 p-2 sm:p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
         <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-xl">
-          <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg p-4 sm:p-6">
+          <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg  p-2 sm:p-6">
             <CardTitle className="text-xl sm:text-2xl lg:text-3xl font-bold flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-white font-bold text-lg sm:text-xl flex-shrink-0">
                 {selectedJob?.title?.charAt(0).toUpperCase() || "J"}

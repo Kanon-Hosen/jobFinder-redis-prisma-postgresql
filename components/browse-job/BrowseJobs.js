@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import JobCard from "@/components/JobCard";
 import SearchFilter from "@/components/browse-job/SearchFilter";
-import Loading from "@/components/Loading";
 
 export default function BrowseJobs() {
   const searchParams = useSearchParams();
@@ -113,10 +112,10 @@ export default function BrowseJobs() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse delay-2000"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-20">
+        <div className="relative max-w-7xl mx-auto md:px-6 px-2 py-20">
           <div className="text-center max-w-4xl mx-auto">
             {/* Floating Stats */}
-            <div className="flex justify-center items-center gap-8 mb-8">
+            <div className="flex flex-col md:flex-row justify-center items-center md:gap-8 gap-3 mb-8">
               <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
                 <TrendingUp className="w-4 h-4 text-yellow-300" />
                 <span className="text-white text-sm font-medium">
@@ -175,7 +174,7 @@ export default function BrowseJobs() {
         </div>
       </div>
 
-      <div className="max-w-7xl  mx-auto px-6 -mt-16 relative z-10">
+      <div className="max-w-7xl  mx-auto md:px-6 px-2 -mt-16 relative z-10">
         {/* Enhanced Search Section */}
           <SearchFilter
             setSearchTerm={setSearchTerm}

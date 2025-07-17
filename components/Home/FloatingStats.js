@@ -53,8 +53,8 @@ export default function FloatingStats({ totalJobs }) {
 
   return (
     <section className="py-16 -mt-16 relative z-10">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="max-w-7xl mx-auto md:px-6 px-2">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             const value =

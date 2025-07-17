@@ -211,7 +211,7 @@ export default function LoginPage() {
             </div>
 
             {/* Social Login */}
-            <div className="grid grid-cols-2 gap-3">
+            {/* <div className="grid grid-cols-2 gap-3">
               <Button
                 type="button"
                 variant="outline"
@@ -251,12 +251,12 @@ export default function LoginPage() {
                 </svg>
                 Facebook
               </Button>
-            </div>
+            </div> */}
 
             {/* Register Link */}
             <div className="text-center pt-4 border-t border-gray-200">
               <p className="text-sm text-gray-600">
-                Don`&apos;`t have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link
                   href="/register"
                   className="font-medium text-emerald-600 hover:text-emerald-700 transition-colors"

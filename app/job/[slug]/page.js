@@ -24,7 +24,14 @@ export default function JobDetails() {
   const [error, setError] = useState(null);
   const [openModal, setopenModal] = useState(false);
   const { user, loading } = useCurrentUser();
-  console.log("user", user);
+
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user.email) {
+      router.replace("/login");
+    }
+  }, [user, loading]);
   useEffect(() => {
     if (!id) return;
     setLoading(true);
@@ -104,7 +111,7 @@ export default function JobDetails() {
   console.log(isApplied);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 py-8 md:px-4">
       <div className="max-w-5xl mx-auto">
         {/* Header Card */}
         <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden mb-8">
@@ -166,7 +173,7 @@ export default function JobDetails() {
                 <div>
                   <p className="text-sm text-gray-500">Salary</p>
                   <p className="text-xl font-bold text-gray-900">
-                    ${Number(job.salary).toLocaleString()}
+                    ${job.salary}
                   </p>
                 </div>
               </div>

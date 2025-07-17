@@ -164,7 +164,7 @@ export default function JobCard({ job }) {
           </div>
 
           {/* Location and time with icons */}
-          <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-3 text-xs">
             <div className="flex items-center gap-1.5 text-gray-500">
               <div className="p-1 bg-gray-100 rounded-full">
                 <MapPin className="w-3 h-3" />
@@ -211,7 +211,7 @@ export default function JobCard({ job }) {
                   </div>
                   <div className="flex flex-col">
                     <span className="font-bold text-gray-900 text-sm">
-                      ${job.salary.toLocaleString()}
+                      ${job.salary}
                     </span>
                     <span className="text-xs text-gray-500">per year</span>
                   </div>

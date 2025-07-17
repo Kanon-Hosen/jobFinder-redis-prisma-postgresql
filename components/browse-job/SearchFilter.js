@@ -17,7 +17,7 @@ export default function SearchFilter({
 }) {
   return (
     <Card className="mb-12  shadow-md border-0 bg-white/95 backdrop-blur-xl">
-      <CardContent className="p-8">
+      <CardContent className="md:p-8 px-2 py-4">
         {/* Advanced Search Bar */}
         <div className="relative mb-8">
           <div className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400">

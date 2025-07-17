@@ -10,7 +10,7 @@ export default function FeaturedJobs({loading, featuredJobs}) {
       
   return (
     <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto md:px-6 px-2">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Star className="w-4 h-4" />

@@ -37,7 +37,7 @@ export default function Hero() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 py-16 lg:py-20">
+      <div className="relative max-w-7xl mx-auto md:px-6 px-2 py-16 lg:py-20">
         <div className="text-center max-w-4xl mx-auto">
           {/* Floating Badge */}
           <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-6 py-3 mb-8">

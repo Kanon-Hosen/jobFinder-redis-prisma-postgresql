@@ -273,7 +273,7 @@ export default function PostJob() {
 
       {/* Form Section */}
       <section className="py-16 -mt-16 relative z-10">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto md:px-6 px-2">
           <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
             <CardHeader className="text-center pb-8 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-t-lg">
               <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
