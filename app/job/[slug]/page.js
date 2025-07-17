@@ -25,13 +25,13 @@ export default function JobDetails() {
   const [openModal, setopenModal] = useState(false);
   const { user, loading } = useCurrentUser();
 
+  // useEffect(() => {
+  //   if (loading) return;
+  //   if (!user.email) {
+  //     router.replace("/login");
+  //   }
+  // }, [user, loading]);
 
-  useEffect(() => {
-    if (loading) return;
-    if (!user.email) {
-      router.replace("/login");
-    }
-  }, [user, loading]);
   useEffect(() => {
     if (!id) return;
     setLoading(true);

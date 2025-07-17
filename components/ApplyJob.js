@@ -23,20 +23,30 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import Loading from "./Loading";
 
 export default function ApplyJob({ setopenModal }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const jobId = searchParams.get("id");
   console.log(searchParams);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
   const jobTitle = job?.title;
-  console.log(job, user)
+  const { user, loading: userLoading } = useCurrentUser();
+console.log(user)
+  // Check user login or not
+  useEffect(() => {
+    if (userLoading) return;
+    if (!user?.email) {
+      router.replace("/login");
+    }
+  }, [user, userLoading]);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -56,19 +66,6 @@ export default function ApplyJob({ setopenModal }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch user data
-        const userRes = await fetch("/api/me", { credentials: "include" });
-        const userData = await userRes.json();
-        setUser(userData);
-
-        // Pre-fill email if user is logged in
-        if (userData?.email) {
-          setFormData((prev) => ({
-            ...prev,
-            email: userData.email,
-          }));
-        }
-
         // Fetch job data if jobId is provided
         if (jobId) {
           const jobRes = await fetch(`/api/jobs/${jobId}`);
@@ -235,19 +232,14 @@ export default function ApplyJob({ setopenModal }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-emerald-600 mx-auto mb-4" />
-          <p className="text-lg text-gray-600">Loading application form...</p>
-        </div>
-      </div>
+      <Loading/>
     );
   }
   const deadlineDate =
     new Date(job?.applicationDeadline).toLocaleDateString() >= new Date();
-  
+
   if (deadlineDate) {
-     router.push("/")
+    router.push("/");
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">

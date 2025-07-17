@@ -9,9 +9,7 @@ import {
   Star,
   TrendingUp,
   Zap,
-  Building2,
   ArrowUpRight,
-  Bookmark,
 } from "lucide-react";
 import { Badge } from "./ui/badge";
 import Link from "next/link";
