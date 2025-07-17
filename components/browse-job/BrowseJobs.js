@@ -300,8 +300,8 @@ export default function BrowseJobs() {
 
             {/* Load More Section */}
             <div className="text-center py-16">
-              <div className="inline-flex flex-col items-center gap-6 bg-white rounded-3xl px-12 py-8 shadow-xl border border-gray-100">
-                <div className="flex items-center gap-4">
+              <div className="inline-flex flex-col items-center gap-6 bg-white rounded-3xl md:px-12 px-6 py-8 shadow-xl border border-gray-100">
+                <div className="flex items-center justify-center gap-4">
                   <Sparkles className="w-6 h-6 text-emerald-600" />
                   <span className="text-xl font-semibold text-gray-800">
                     Want to see more opportunities?
