@@ -663,7 +663,7 @@ export default function ApplyJob({ setopenModal }) {
                       {job.salary && (
                         <div className="flex items-center gap-2">
                           <span className="text-emerald-600 font-semibold">
-                            ${Number(job.salary).toLocaleString()}
+                            ${job.salary}
                           </span>
                         </div>
                       )}

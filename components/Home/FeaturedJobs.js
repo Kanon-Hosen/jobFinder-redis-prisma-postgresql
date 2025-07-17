@@ -36,19 +36,22 @@ export default function FeaturedJobs({loading, featuredJobs}) {
           </div>
         ) : featuredJobs.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
               {featuredJobs.map((job, index) => (
                 <div
                   key={index}
-                  className="transform hover:scale-105 transition-all duration-300"
+                  className="transform transition-all duration-300"
                 >
                   <JobCard job={job} />
                 </div>
               ))}
             </div>
-            <div className="text-center">
+            <div className="text-center mt-10">
               <Link href="/browse-jobs">
-                <Button size="lg" className="bg-gradient-to-r cursor-pointer from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-12 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-2xl">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r cursor-pointer from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-12 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-2xl"
+                >
                   Discover All Opportunities
                   <ArrowRight className="ml-3 w-5 h-5" />
                 </Button>

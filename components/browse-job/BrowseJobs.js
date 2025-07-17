@@ -175,13 +175,13 @@ export default function BrowseJobs() {
 
       <div className="max-w-7xl  mx-auto md:px-6 px-2 -mt-16 relative z-10">
         {/* Enhanced Search Section */}
-          <SearchFilter
-            setSearchTerm={setSearchTerm}
-            searchTerm={searchTerm}
-            filterOptions={filterOptions}
-            filter={filter}
-            setFilter={setFilter}
-          /> 
+        <SearchFilter
+          setSearchTerm={setSearchTerm}
+          searchTerm={searchTerm}
+          filterOptions={filterOptions}
+          filter={filter}
+          setFilter={setFilter}
+        />
 
         {/* Results Section */}
         {loading ? (
@@ -282,11 +282,11 @@ export default function BrowseJobs() {
             </div>
 
             {/* Jobs Grid with Animation */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
               {filteredJobs.map((job, index) => (
                 <div
                   key={job.id || index}
-                  className="transform hover:scale-105 transition-all duration-300"
+                  className="transform transition-all duration-300"
                   style={{
                     animationDelay: `${index * 100}ms`,
                     animation: "fadeInUp 0.6s ease-out forwards",

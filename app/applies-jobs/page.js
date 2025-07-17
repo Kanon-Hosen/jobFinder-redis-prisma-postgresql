@@ -310,11 +310,11 @@ export default function ApplicationsPage() {
 
       {/* Main Content */}
       <section className="py-16 -mt-16 relative z-10">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto md:px-6 px-2">
           {/* Enhanced Search and Filter */}
           <Card className="mb-8 bg-white/95 backdrop-blur-sm border-0 shadow-xl">
-            <CardContent className="p-8">
-              <div className="flex flex-col lg:flex-row gap-6">
+            <CardContent className="sm:p-8 px-4 py-4">
+              <div className="flex w-full flex-col lg:flex-row gap-6">
                 <div className="flex-1 relative">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                     <Search className="h-5 w-5" />
@@ -326,9 +326,9 @@ export default function ApplicationsPage() {
                     className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-2xl bg-gray-50/50 focus:bg-white transition-all duration-300"
                   />
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col md:flex-row gap-4">
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-56 h-14 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-2xl bg-gray-50/50">
+                    <SelectTrigger className="w-56 h-14 py-6 border-2 border-gray-200 focus:border-emerald-400 focus:ring-emerald-400 rounded-2xl bg-gray-50/50">
                       <Filter className="w-5 h-5 mr-2 text-gray-500" />
                       <SelectValue placeholder="Filter by status" />
                     </SelectTrigger>
@@ -341,10 +341,10 @@ export default function ApplicationsPage() {
                       <SelectItem value="withdrawn">Withdrawn</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Button className="h-14 px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 border-2 border-gray-200 rounded-2xl">
+                  {/* <Button className="h-14 px-6 hidden md:block bg-gray-100 hover:bg-gray-200 text-gray-700 border-2 border-gray-200 rounded-2xl">
                     <RefreshCw className="w-5 h-5 mr-2" />
                     Refresh
-                  </Button>
+                  </Button> */}
                   <Link href="/browse-jobs">
                     <Button className="h-14 px-8 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
                       <Briefcase className="w-5 h-5 mr-2" />
@@ -363,21 +363,21 @@ export default function ApplicationsPage() {
                 <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-8">
                   <FileText className="h-12 w-12 text-gray-400" />
                 </div>
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                   {applications.length === 0
                     ? "No applications yet"
                     : "No matching applications"}
                 </h3>
-                <p className="text-gray-600 text-xl mb-8 max-w-2xl mx-auto">
+                <p className="text-gray-600 text-base md:text-xl mb-8 max-w-xl mx-auto px-4">
                   {applications.length === 0
                     ? "Start your job search journey by applying to positions that match your skills and interests."
                     : "Try adjusting your search terms or filters to find what you're looking for."}
                 </p>
-                <div className="flex justify-center gap-4">
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
                   {applications.length === 0 ? (
                     <Link href="/browse-jobs">
-                      <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-10 py-4 text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
-                        <Briefcase className="w-6 h-6 mr-2" />
+                      <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-8 py-3 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        <Briefcase className="w-5 h-5 mr-2" />
                         Browse Jobs
                       </Button>
                     </Link>
@@ -388,7 +388,7 @@ export default function ApplicationsPage() {
                         setStatusFilter("all");
                       }}
                       variant="outline"
-                      className="px-10 py-4 text-lg rounded-2xl border-2"
+                      className="px-8 py-3 text-base md:text-lg rounded-xl border-2"
                     >
                       Clear Filters
                     </Button>
@@ -411,23 +411,21 @@ export default function ApplicationsPage() {
                     key={application.id}
                     className="group bg-white/95 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
                   >
-                    {/* Status indicator bar */}
                     <div
                       className={`h-1.5 ${statusConfig.dot} transition-all duration-300 group-hover:h-2`}
                     />
 
-                    <CardContent className="p-8">
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="flex items-start gap-6">
-                          {/* Company logo placeholder */}
+                    <CardContent className="p-6 md:p-8">
+                      <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-6">
+                        <div className="flex flex-col sm:flex-row items-start gap-6">
                           <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
                             {application.job?.title?.charAt(0).toUpperCase() ||
                               "J"}
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="text-2xl font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                            <div className="flex flex-wrap items-center gap-3 mb-2">
+                              <h3 className="text-xl md:text-2xl font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">
                                 {application.job?.title || "Job Title"}
                               </h3>
                               {isRecent && (
@@ -440,11 +438,11 @@ export default function ApplicationsPage() {
                                 {application.job?.type || "Full-time"}
                               </Badge>
                             </div>
-                            <p className="text-gray-600 font-semibold text-lg mb-3 flex items-center gap-2">
+                            <p className="text-gray-600 font-semibold text-base md:text-lg mb-3 flex items-center gap-2">
                               <Building className="w-5 h-5 text-gray-400" />
                               {application.job?.company || "Company Name"}
                             </p>
-                            <div className="flex items-center gap-6 text-sm text-gray-500">
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                               <div className="flex items-center gap-2">
                                 <MapPin className="w-4 h-4" />
                                 <span className="font-medium">
@@ -465,8 +463,7 @@ export default function ApplicationsPage() {
                           </div>
                         </div>
 
-                        {/* Status badge and actions */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3">
                           <Badge
                             className={`${statusConfig.bg} ${statusConfig.text} ${statusConfig.border} border-2 font-bold px-4 py-2 text-sm ${statusConfig.glow} shadow-lg`}
                           >
@@ -542,8 +539,7 @@ export default function ApplicationsPage() {
                         </div>
                       </div>
 
-                      {/* Enhanced Application details */}
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-6 border-t border-gray-100">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-gray-100">
                         <div className="space-y-2">
                           <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
                             Job Salary
@@ -588,11 +584,8 @@ export default function ApplicationsPage() {
                         </div>
                       </div>
 
-                      {/* Skills and Contact Info */}
-
-                      {/* Action buttons */}
-                      <div className="flex items-center justify-between pt-6 border-t border-gray-100 mt-6">
-                        <div className="flex items-center gap-4">
+                      <div className="flex flex-col md:flex-row items-center justify-between pt-6 border-t border-gray-100 mt-6 gap-4">
+                        <div className="flex flex-wrap items-center gap-4">
                           <Link
                             href={`/job/${application.job?.title}?id=${application.jobId}`}
                           >
@@ -624,7 +617,7 @@ export default function ApplicationsPage() {
                           )}
                         </div>
 
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500 text-center md:text-right">
                           Application #{application.id?.slice(-6) || "000000"}
                         </div>
                       </div>

@@ -69,64 +69,42 @@ export default function JobCard({ job }) {
   const isNewJob =
     job.createdAt &&
     new Date() - new Date(job.createdAt) < 3 * 24 * 60 * 60 * 1000;
-  // // let canApply = false;
-  // // let deadlineEnd = "No deadline";
-
-  // // if (job?.applicationDeadline) {
-  // //   // const deadlineDate = new Date(job.applicationDeadline);
-  // //   const today = new Date();
-
-  // //   if (!isNaN(deadlineDate)) {
-  // //     deadlineEnd = deadlineDate.toLocaleDateString();
-  // //     canApply = deadlineDate >= today;
-  // //   }
-  //   }
-
   const deadlineDate =
     new Date(job?.applicationDeadline).toLocaleDateString() < new Date();
+
   return (
     <Link href={`/job/${job.title}?id=${job.id}`}>
-      <Card className="group relative bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer overflow-hidden transform hover:-translate-y-2 ">
-        {/* Animated background gradient */}
+      <Card className="h-full group relative bg-white border-0 shadow-md hover:shadow-xl transition-all duration-500 cursor-pointer overflow-hidden transform hover:-translate-y-2">
+        {/* Background Gradient */}
         <div
           className={`absolute inset-0 bg-gradient-to-br ${jobStyle.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
         />
-
-        {/* Decorative corner element */}
         <div
           className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl ${jobStyle.gradient} opacity-10 rounded-bl-full`}
         />
-
-        <CardContent className="relative px-6 py-3 space-y-4">
-          {/* Header with company logo placeholder and badges */}
-          <div className="flex items-start justify-between">
-            <div className="flex items-start gap-4">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-gray-700 transition-colors ">
-                    {job.title || "Job Title"}
-                  </h3>
-                  {isNewJob && (
-                    <Badge className="bg-green-500 absolute -top-2 right-4 text-white text-xs px-2 py-0.5">
-                      <Zap className="w-3 h-3 mr-1" />
-                      NEW
-                    </Badge>
-                  )}
-                </div>
-                <p className="text-gray-600 font-medium text-sm">
-                  {job.company || "Company Name"}
-                </p>
+        <CardContent className="relative px-4 sm:px-6 py-4 space-y-3 sm:space-y-4">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 group-hover:text-gray-700 transition-colors">
+                  {job.title || "Job Title"}
+                </h3>
+                {isNewJob && (
+                  <Badge className="bg-green-500 absolute -top-2 right-4 text-white text-xs px-2 py-0.5">
+                    <Zap className="w-3 h-3 mr-1" />
+                    NEW
+                  </Badge>
+                )}
               </div>
+              <p className="text-sm sm:text-base text-gray-600 font-medium">
+                {job.company || "Company Name"}
+              </p>
             </div>
-
-            {/* Bookmark icon
-            <button className="p-2 rounded-full hover:bg-gray-100 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-110">
-              <Bookmark className="w-4 h-4 text-gray-400 hover:text-blue-500" />
-            </button> */}
           </div>
 
-          {/* Job type badge with unique styling */}
-          <div className="flex items-center gap-3">
+          {/* Job Type + Tags */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <Badge
               className={`${jobStyle.bg} ${jobStyle.text} border-0 px-3 py-1.5 font-semibold text-sm ${jobStyle.shadow} shadow-sm`}
             >
@@ -151,31 +129,31 @@ export default function JobCard({ job }) {
             )}
           </div>
 
-          {/* Description with fade effect */}
+          {/* Description */}
           <div className="relative">
-            <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed line-clamp-2">
               {job.description || "Job description not available"}
             </p>
             <div className="absolute bottom-0 right-0 w-8 h-4 bg-gradient-to-l from-white to-transparent" />
           </div>
 
-          {/* Location and time with icons */}
-          <div className="flex items-center gap-3 text-xs">
+          {/* Location + Time */}
+          <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm">
             <div className="flex items-center gap-1.5 text-gray-500">
               <div className="p-1 bg-gray-100 rounded-full">
-                <MapPin className="w-3 h-3" />
+                <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
               </div>
               <span className="font-medium">{job.location || "Remote"}</span>
             </div>
             <div className="flex items-center gap-1.5 text-gray-500">
               <div className="p-1 bg-gray-100 rounded-full">
-                <Clock className="w-3 h-3" />
+                <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
               </div>
               <span>{job.createdAt ? timeAgo(job.createdAt) : "Recently"}</span>
             </div>
           </div>
 
-          {/* Benefits with pill design */}
+          {/* Benefits */}
           {job.benefits && job.benefits.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {job.benefits.slice(0, 3).map((benefit, i) => (
@@ -194,10 +172,9 @@ export default function JobCard({ job }) {
             </div>
           )}
 
-          {/* Bottom section with enhanced styling */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-            <div className="flex items-center gap-4">
-              {/* Salary with emphasis */}
+          {/* Bottom Info */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-4 gap-3 border-t border-gray-100">
+            <div className="flex flex-wrap items-center gap-4">
               {job.salary && (
                 <div className="flex items-center gap-1.5">
                   <div
@@ -213,8 +190,6 @@ export default function JobCard({ job }) {
                   </div>
                 </div>
               )}
-
-              {/* Applicants with visual indicator */}
               <div className="flex items-center gap-1.5 text-sm">
                 <div className="relative">
                   <Users className="w-4 h-4 text-gray-400" />
@@ -229,7 +204,6 @@ export default function JobCard({ job }) {
               </div>
             </div>
 
-            {/* Animated arrow */}
             <div className="flex items-center gap-1 text-gray-400 group-hover:text-emerald-600 transition-colors">
               <span className="text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Apply
@@ -238,19 +212,19 @@ export default function JobCard({ job }) {
             </div>
           </div>
 
-          {/* Deadline with urgency indicator */}
+          {/* Deadline */}
           {job.applicationDeadline && (
             <div className="flex items-center justify-between pt-3 border-t border-gray-100">
               <div className="flex items-center gap-2">
                 <CalendarDays className="w-4 h-4 text-gray-400" />
                 {deadlineDate ? (
                   <span className="text-sm text-gray-600">
-                    Deadline {" "}
+                    Deadline{" "}
                     <span className="font-semibold text-red-400">End</span>
                   </span>
                 ) : (
                   <span className="text-sm text-gray-600">
-                    Deadline {" "}
+                    Deadline{" "}
                     <span className="font-semibold text-red-400">
                       {formatDate(job.applicationDeadline)}
                     </span>
@@ -262,7 +236,7 @@ export default function JobCard({ job }) {
           )}
         </CardContent>
 
-        {/* Hover glow effect */}
+        {/* Hover Glow */}
         <div
           className={`absolute inset-0 bg-gradient-to-r ${jobStyle.gradient} opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-500 pointer-events-none`}
         />

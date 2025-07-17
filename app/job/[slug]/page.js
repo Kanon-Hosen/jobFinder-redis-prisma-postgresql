@@ -312,7 +312,11 @@ export default function JobDetails() {
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <div className="flex items-center justify-between text-sm text-gray-500">
                   <span>Application Status</span>
-                  <span className="text-emerald-600 font-medium">Open</span>
+                  {deadlineOver ? (
+                    <span className="text-red-600 font-medium">Closed</span>
+                  ) : (
+                    <span className="text-emerald-600 font-medium">Open</span>
+                  )}
                 </div>
               </div>
             </div>
