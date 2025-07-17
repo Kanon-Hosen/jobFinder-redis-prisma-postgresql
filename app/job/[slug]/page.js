@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import ApplyJob from "@/components/ApplyJob";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import Link from "next/link";
 
 export default function JobDetails() {
   const searchParams = useSearchParams();
@@ -46,7 +47,7 @@ export default function JobDetails() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  console.log(job);
+  job;
   if (isloading)
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 flex justify-center items-center">
@@ -92,9 +93,9 @@ export default function JobDetails() {
   //         jobId: job.id,
   //       }),
   //     });
-  //     console.log(res)
+  //     (res)
   //   } catch (error) {
-  //     console.log(error.message)
+  //     (error.message)
   //   }
   // };
 
@@ -104,12 +105,12 @@ export default function JobDetails() {
     return <ApplyJob setopenModal={setopenModal} />;
   }
 
-  const deadlineDate = new Date(job.applicationDeadline);
+  const deadlineDate = new Date(job?.applicationDeadline);
   const deadlineOver = deadlineDate < new Date();
-
   const isApplied = job.applies.some((apply) => user?.id === apply.userId);
-  console.log(isApplied);
-
+  const isDisabled =
+    !user?.email || user?.role === "EMPLOYER" || deadlineOver || isApplied;
+  console.log(isDisabled);
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 py-8 md:px-4">
       <div className="max-w-5xl mx-auto">
@@ -278,25 +279,34 @@ export default function JobDetails() {
                   <span>Already Applied</span>
                 </div>
               )}
-              {loading ? (
-                <p>Loading...</p>
-              ) : (
-                <button
-                  onClick={() => {
-                    if (user?.role !== "EMPLOYER") setopenModal(true);
-                  }}
-                  disabled={
-                    user?.role === "EMPLOYER" || isApplied || deadlineOver
-                  }
-                  className={`w-full px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 font-semibold text-lg shadow-lg transform hover:-translate-y-0.5 ${
-                    user?.role === "EMPLOYER" || deadlineDate
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl"
-                  }`}
+              {!user?.email ? (
+                <Link
+                  className="text-center bg-emerald-500 py-3 flex items-center justify-center font-semibold text-white rounded-3xl"
+                  href="/login"
                 >
-                  <Briefcase size={20} />
-                  Apply Now
-                </button>
+                  Login to apply
+                </Link>
+              ) : (
+                <>
+                  {loading ? (
+                    <p>Loading...</p>
+                  ) : (
+                    <button
+                      disabled={isDisabled}
+                      onClick={() => {
+                        if (!isDisabled) setopenModal(true);
+                      }}
+                      className={`w-full px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 font-semibold text-lg shadow-lg transform hover:-translate-y-0.5 ${
+                        isDisabled
+                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                          : "bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl"
+                      }`}
+                    >
+                      <Briefcase size={20} />
+                      Apply Now
+                    </button>
+                  )}
+                </>
               )}
 
               <div className="mt-4 pt-4 border-t border-gray-100">

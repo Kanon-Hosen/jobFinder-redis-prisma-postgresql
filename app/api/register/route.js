@@ -9,7 +9,6 @@ const prisma = new PrismaClient();
 
 export async function POST(req) {
   const sessionId = uuidv4();
-  console.log(sessionId);
   const body = await req.json();
   const { name, email, password, role, companyName } = body;
 
@@ -43,7 +42,6 @@ export async function POST(req) {
     }
 
     const newUser = await prisma.user.create({ data: userData });
-    console.log(newUser);
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET,

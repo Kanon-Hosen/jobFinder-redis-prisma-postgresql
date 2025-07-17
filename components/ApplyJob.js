@@ -30,7 +30,7 @@ export default function ApplyJob({ setopenModal }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const jobId = searchParams.get("id");
-  console.log(searchParams);
+  searchParams;
   // const [user, setUser] = useState(null);
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,6 @@ export default function ApplyJob({ setopenModal }) {
   const [errors, setErrors] = useState({});
   const jobTitle = job?.title;
   const { user, loading: userLoading } = useCurrentUser();
-console.log(user)
   // Check user login or not
   useEffect(() => {
     if (userLoading) return;
@@ -172,7 +171,7 @@ console.log(user)
       // submitData.append("jobTitle", jobTitle || "");
       // submitData.append("applyDate", new Date().toISOString());
       // submitData.append("status", "pending");
-      // console.log(submitData)
+      // (submitData)
       const response = await fetch("/api/apply", {
         method: "POST",
         headers: {
@@ -231,9 +230,7 @@ console.log(user)
   }
 
   if (isLoading) {
-    return (
-      <Loading/>
-    );
+    return <Loading />;
   }
   const deadlineDate =
     new Date(job?.applicationDeadline).toLocaleDateString() >= new Date();

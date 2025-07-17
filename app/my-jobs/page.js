@@ -140,15 +140,15 @@ export default function MyJobs() {
     });
   };
 
-  const formatSalary = (salary) => {
-    if (!salary) return "Not specified";
-    // Handle if salary is already formatted or just a number
-    const numericSalary = salary.toString().replace(/[^0-9]/g, "");
-    if (numericSalary) {
-      return `$${Number(numericSalary).toLocaleString()}`;
-    }
-    return salary;
-  };
+  // const formatSalary = (salary) => {
+  //   if (!salary) return "Not specified";
+  //   // Handle if salary is already formatted or just a number
+  //   const numericSalary = salary.toString().replace(/[^0-9]/g, "");
+  //   if (numericSalary) {
+  //     return `$${Number(numericSalary).toLocaleString()}`;
+  //   }
+  //   return salary;
+  // };
 
   const isDeadlinePassed = (deadline) => {
     if (!deadline) return false;

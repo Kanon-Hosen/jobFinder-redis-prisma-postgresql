@@ -9,7 +9,6 @@ export async function POST(req) {
   const jobId = await data.formData.jobId;
   const formData = data.formData;
   const userId = await JwtVerify();
-  console.log("jobId:", jobId, "userId:", userId);
   if (!jobId || !userId) {
     return NextResponse.json(
       { message: "userID and JobID invalid" },
@@ -23,7 +22,6 @@ export async function POST(req) {
     const exist = await prisma.applications.findFirst({
       where: { jobId, userId },
     });
-    console.log("exist", exist);
     if (exist) {
       return NextResponse.json({ message: "Already applied" }, { status: 409 });
     }
@@ -44,7 +42,6 @@ export async function POST(req) {
         available: formData.availableFrom, // নাম মেলাতে হবে
       },
     });
-    console.log("apply", apply);
     await redis.del(`job:${jobId}`);
     return NextResponse.json(apply, { status: 201 });
   } catch (error) {
@@ -54,7 +51,6 @@ export async function POST(req) {
 
 export async function GET(req) {
   const userId = await JwtVerify();
-  console.log(userId);
   if (!userId) {
     return NextResponse.json({ message: "userID invalid" }, { status: 401 });
   }

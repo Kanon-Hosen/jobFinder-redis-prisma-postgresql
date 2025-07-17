@@ -6,25 +6,24 @@ const prisma = new PrismaClient();
 
 export async function POST(req) {
   const userId = await JwtVerify();
-  if (!userId ) {
+  if (!userId) {
     return NextResponse.json({ message: "User Unauthorized" }, { status: 400 });
   }
   try {
     const {
-    title,
-    description,
-    location,
-    type,
-    workSetting,
-    salary,
-    company,
-    requirements,
-    benefits,
-    experienceLevel,
-    applicationDeadline,
+      title,
+      description,
+      location,
+      type,
+      workSetting,
+      salary,
+      company,
+      requirements,
+      benefits,
+      experienceLevel,
+      applicationDeadline,
     } = await req.json();
 
-    console.log(benefits, type, salary, userId);
 
     const postJob = await prisma.jobs.create({
       data: {

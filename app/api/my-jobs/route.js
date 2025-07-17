@@ -5,8 +5,7 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function GET(req) {
-    const userId = await JwtVerify();
-    console.log(userId)
+  const userId = await JwtVerify();
   if (!userId) {
     return NextResponse.json({ message: "user not found" }, { status: 400 });
   }
@@ -17,7 +16,7 @@ export async function GET(req) {
     if (cached) {
       return NextResponse.json(JSON.parse(cached), { status: 200 });
     }
-      
+
     const myJobs = await prisma.jobs.findMany({
       where: {
         userId,
@@ -31,9 +30,9 @@ export async function GET(req) {
       },
     });
 
-      await redis.set(`my-jobs:${userId}`, JSON.stringify(myJobs), "EX", 60 * 10);
-      
-      return NextResponse.json(myJobs,{status:200})
+    await redis.set(`my-jobs:${userId}`, JSON.stringify(myJobs), "EX", 60 * 10);
+
+    return NextResponse.json(myJobs, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "Job not found" }, { status: 404 });
   }

@@ -69,7 +69,6 @@ export default function JobCard({ job }) {
   const isNewJob =
     job.createdAt &&
     new Date() - new Date(job.createdAt) < 3 * 24 * 60 * 60 * 1000;
-  console.log(job);
   // // let canApply = false;
   // // let deadlineEnd = "No deadline";
 
@@ -85,7 +84,6 @@ export default function JobCard({ job }) {
 
   const deadlineDate =
     new Date(job?.applicationDeadline).toLocaleDateString() < new Date();
-  console.log(deadlineDate);
   return (
     <Link href={`/job/${job.title}?id=${job.id}`}>
       <Card className="group relative bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer overflow-hidden transform hover:-translate-y-2 ">

@@ -6,7 +6,7 @@ import redis from "@/lib/redis";
 export default async function JwtVerify() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId")?.value;
-  console.log(sessionId);
+  sessionId;
   if (!sessionId) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }

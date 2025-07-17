@@ -42,14 +42,12 @@ export default function FloatingStats({ totalJobs }) {
         .then((res) => res.json())
         .then((data) => setUsers(data));
     } catch (error) {
-      console.log(error.message);
+      error.message;
       setUsers([]);
     }
   }, []);
-  console.log(users);
   const seeker = users.filter((u) => u.role === "SEEKER");
   const employer = users.filter((u) => u.role === "EMPLOYER");
-  console.log(seeker);
 
   return (
     <section className="py-16 -mt-16 relative z-10">

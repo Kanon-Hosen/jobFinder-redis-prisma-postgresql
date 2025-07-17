@@ -26,9 +26,7 @@ import {
   Award,
   Send,
   ExternalLink,
-  Phone,
   Globe,
-  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -212,11 +210,10 @@ export default function ApplicationsPage() {
   };
 
   if (isloading) {
-    return <Loading/>
+    return <Loading />;
   }
 
   const stats = getStatusStats();
-  console.log(applications)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50">
@@ -592,7 +589,6 @@ export default function ApplicationsPage() {
                       </div>
 
                       {/* Skills and Contact Info */}
-                      
 
                       {/* Action buttons */}
                       <div className="flex items-center justify-between pt-6 border-t border-gray-100 mt-6">

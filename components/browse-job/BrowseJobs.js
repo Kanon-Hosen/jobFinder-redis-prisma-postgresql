@@ -70,7 +70,6 @@ export default function BrowseJobs() {
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
   }, [jobs, filter, searchTerm, location]);
-  console.log(jobs)
 
   const filterOptions = [
     { type: "All", icon: "", count: jobs.length },
