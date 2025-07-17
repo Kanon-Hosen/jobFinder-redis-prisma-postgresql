@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Link from "next/link";
+import Loading from "@/components/Loading";
 
 export default function MyJobs() {
   const router = useRouter();
@@ -156,20 +157,7 @@ export default function MyJobs() {
 
   if (userLoading || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative mb-8">
-            <div className="animate-spin rounded-full h-20 w-20 border-4 border-purple-200"></div>
-            <div className="animate-spin rounded-full h-20 w-20 border-4 border-purple-600 border-t-transparent absolute top-0"></div>
-          </div>
-          <div className="space-y-2">
-            <p className="text-2xl font-semibold text-gray-700">
-              Loading your jobs...
-            </p>
-            <p className="text-gray-500">Fetching your job listings</p>
-          </div>
-        </div>
-      </div>
+    <Loading/>
     );
   }
 
@@ -377,7 +365,7 @@ export default function MyJobs() {
                     </h2>
                     <p className="text-gray-600">
                       Showing {filter !== "All" ? filter.toLowerCase() : "all"}{" "}
-                      positions you`&apos;`ve posted
+                      positions you&apos;ve posted
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
@@ -439,7 +427,7 @@ export default function MyJobs() {
                                 <div className="flex items-center gap-2 mt-1">
                                   {job.salary && (
                                     <p className="text-sm text-emerald-600 font-semibold">
-                                      {formatSalary(job.salary)}
+                                      ${job.salary}
                                     </p>
                                   )}
                                   {job.experienceLevel && (

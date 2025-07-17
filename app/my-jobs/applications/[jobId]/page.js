@@ -27,6 +27,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import Loading from "@/components/Loading";
 
 const statusStyles = {
   Pending: {
@@ -164,22 +165,7 @@ export default function JobApplications() {
 
   if (loading || !user || user.role !== "EMPLOYER") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 flex items-center justify-center px-4">
-        <div className="text-center">
-          <div className="relative mb-8">
-            <div className="animate-spin rounded-full h-16 w-16 sm:h-20 sm:w-20 border-4 border-purple-200"></div>
-            <div className="animate-spin rounded-full h-16 w-16 sm:h-20 sm:w-20 border-4 border-purple-600 border-t-transparent absolute top-0"></div>
-          </div>
-          <div className="space-y-2">
-            <p className="text-xl sm:text-2xl font-semibold text-gray-700">
-              Loading...
-            </p>
-            <p className="text-sm sm:text-base text-gray-500">
-              Checking permissions
-            </p>
-          </div>
-        </div>
-      </div>
+     <Loading/>
     );
   }
 
@@ -308,7 +294,7 @@ export default function JobApplications() {
                   No applications yet
                 </h3>
                 <p className="text-gray-600 text-sm sm:text-base lg:text-lg px-4">
-                  This job hasn`&apos;`t received any applications yet. Share
+                  This job hasn&apos;t received any applications yet. Share
                   the job posting to attract candidates.
                 </p>
               </div>

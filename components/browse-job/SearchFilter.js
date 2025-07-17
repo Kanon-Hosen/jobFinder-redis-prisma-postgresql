@@ -1,6 +1,5 @@
 "use client";
 
-import React, { Suspense } from "react";
 import { Card, CardContent } from "../ui/card";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
@@ -17,7 +16,7 @@ export default function SearchFilter({
   filter,
 }) {
   return (
-    <Suspense>
+    <div>
       <Card className="mb-12  shadow-md border-0 bg-white/95 backdrop-blur-xl">
         <CardContent className="p-8">
           {/* Advanced Search Bar */}
@@ -81,6 +80,6 @@ export default function SearchFilter({
           </div>
         </CardContent>
       </Card>
-    </Suspense>
+    </div>
   );
 }

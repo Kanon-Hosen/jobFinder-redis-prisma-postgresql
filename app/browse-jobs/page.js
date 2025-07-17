@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, Suspense } from "react";
 import {
   Briefcase,
   Sparkles,
@@ -176,13 +176,15 @@ export default function BrowseJobs() {
 
       <div className="max-w-7xl  mx-auto px-6 -mt-16 relative z-10">
         {/* Enhanced Search Section */}
-        <SearchFilter
-          setSearchTerm={setSearchTerm}
-          searchTerm={searchTerm}
-          filterOptions={filterOptions}
-          filter={filter}
-          setFilter={setFilter}
-        />
+        <Suspense fallback={<p>Loading search params...</p>}>
+          <SearchFilter
+            setSearchTerm={setSearchTerm}
+            searchTerm={searchTerm}
+            filterOptions={filterOptions}
+            filter={filter}
+            setFilter={setFilter}
+          /> 
+        </Suspense>
 
         {/* Results Section */}
         {loading ? (
@@ -222,7 +224,7 @@ export default function BrowseJobs() {
                 No matches found
               </h3>
               <p className="text-gray-600 text-lg mb-3">
-                We couldn`&apos;`t find any jobs matching your criteria.
+                We couldn&apos;t find any jobs matching your criteria.
               </p>
               <p className="text-gray-500 mb-8">
                 Try adjusting your search terms or filters to discover more
@@ -257,7 +259,7 @@ export default function BrowseJobs() {
                     {searchTerm && (
                       <span>
                         {" "}
-                        matching `&quot;`
+                        matching &quot;
                         <span className="font-semibold text-gray-900">
                           {searchTerm}
                         </span>
