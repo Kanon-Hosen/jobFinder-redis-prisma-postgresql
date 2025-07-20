@@ -10,7 +10,7 @@ export default function useCurrentUser() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch("/api/me");
+        const res = await fetch("/api/auth/me");
         if (!res.ok) throw new Error("Failed to fetch user");
         const data = await res.json();
         setUser(data);

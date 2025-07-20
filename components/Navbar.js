@@ -34,7 +34,7 @@ export default function Navbar() {
 
   useEffect(() => {
     async function fetchUser() {
-      const res = await fetch("/api/me", { credentials: "include" });
+      const res = await fetch("/api/auth/me", { credentials: "include" });
       const data = await res.json();
       setUser(data?.email ? data : null);
     }
@@ -42,7 +42,7 @@ export default function Navbar() {
   }, [pathname]);
 
   const logOut = async () => {
-    await fetch("/api/logout", {
+    await fetch("/api/auth/logout", {
       method: "POST",
     });
     setUser(null);
